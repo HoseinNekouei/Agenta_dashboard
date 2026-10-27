@@ -6,11 +6,13 @@ import {
   LogOut, Loader2, ArrowRight, UploadCloud, FileText, Upload, MessageSquare, Globe
 } from 'lucide-react';
 
+version= "1.1.1"
+
 const API_BASE = "https://aiagenta.ir";
 
 const AGENT_TYPES_CONFIG = [
-  { value: "support", label: "Support" },
-  { value: "sales", label: "Sales" }
+  { value: "sales", label: "Sales" },
+  { value: "support", label: "Support" }
 ];
 
 // --- TRANSLATION DICTIONARY ---
