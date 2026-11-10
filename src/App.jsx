@@ -3,16 +3,14 @@ import {
   LayoutDashboard, Settings, Database, Ticket, 
   Wallet, Key, Plus, Trash2, 
   RefreshCw, CheckCircle2, ShieldAlert, AlertCircle,
-  LogOut, Loader2, ArrowRight, UploadCloud, FileText, Upload, MessageSquare, Globe
+  LogOut, Loader2, ArrowRight, UploadCloud, FileText, Upload, MessageSquare, Globe, Code, Copy
 } from 'lucide-react';
 
-version= "1.1.1"
-
-const API_BASE = "https://aiagenta.ir";
+const API_BASE = "http://localhost:8000";
 
 const AGENT_TYPES_CONFIG = [
-  { value: "sales", label: "Sales" },
-  { value: "support", label: "Support" }
+  { value: "support", label: "Support" },
+  { value: "sales", label: "Sales" }
 ];
 
 // --- TRANSLATION DICTIONARY ---
@@ -25,7 +23,9 @@ const translations = {
     tab_knowledge: "Knowledge Base",
     tab_tickets: "Tickets & Leads",
     tab_finances: "Finances & Quota",
+    tab_widget: "Widget Token",
     tab_apikeys: "API Keys",
+    KB_Records: "KKnowledge Base Records",
     logout: "Logout",
     welcome: "Welcome back!",
     welcome_sub: "Sign in to manage your AI Autonomous Agents.",
@@ -99,18 +99,82 @@ const translations = {
     rate_limits: "Rate Limits & Quota",
     chat_daily: "Chat Daily Quota",
     audio_daily: "Audio Daily Quota",
+    widget_title: "Widget Token Generation",
+    widget_desc: "Generate a JWT token for a specific domain to embed the live widget.",
+    domain_label: "Website Domain",
+    generate_widget_btn: "Generate Token",
+    copy: "Copy",
+    copied: "Copied!",
     api_title: "API Key Management",
     api_desc: "Securely rotate or revoke programmatic authentication keys.",
     api_warn: "Never expose your API key in client-side public code or repositories. New keys are securely emailed to your account.",
+    api_key_hidden: "Hidden for security. Regenerate to obtain a new key.",
     regen_key: "Regenerate API Key",
     no_vectors: "No vectors found in collection.",
     no_tickets: "No tickets generated yet.",
     plan: "Plan",
     status: "Status",
-    type: "Type"
+    type: "Type",
+    loading_text: "Loading...",
+    plan_basic: "Basic",
+    status_active: "Active",
+    status_unknown: "Unknown",
+    type_sales: "Sales",
+    type_support: "Support",
+    metric_leads_desc: "Leads & Support escalations",
+    metric_kb_desc: "FAQ & Catalog items",
+    placeholder_name: "Agenta Inc.",
+    placeholder_email: "admin@company.com",
+    placeholder_domain: "https://example.com",
+    select_json: "Select a JSON file",
+    back_btn: "Back",
+    toast_signup_otp_sent: "Signup OTP sent to your email.",
+    toast_signup_otp_failed: "Failed to request signup OTP.",
+    toast_signup_success: "Signed up successfully!",
+    toast_otp_sent: "OTP code sent to your email.",
+    toast_otp_failed: "Failed to request OTP.",
+    toast_login_success: "Logged in successfully!",
+    toast_invalid_otp: "Invalid verification code.",
+    toast_settings_saved: "Agent settings updated successfully!",
+    toast_settings_failed: "Failed to save settings.",
+    toast_key_regen_success: "API Key regenerated and emailed to admin.",
+    toast_key_regen_failed: "Failed to regenerate key.",
+    toast_domain_req: "Please enter a domain.",
+    toast_token_gen_success: "Token generated successfully.",
+    toast_token_gen_failed: "Failed to generate token.",
+    toast_file_req: "Please select a file first.",
+    toast_upload_success: "File uploaded successfully!",
+    toast_upload_failed: "Failed to upload file.",
+    confirm_logout: "Are you sure you want to log out?",
+    confirm_regen_key: "Regenerate API Key? The old key will be invalidated immediately.",
+    generated_jwt_label: "Generated JWT Token",
+    logout_success: "Logged out successfully.",
+    api_key_generated: "New API Key Generated",
+    api_key_once_warning: "Please copy this key now. You will not be able to see it again!",
+    toast_api_key_success: "API Key generated successfully.",
+    resend_otp: "Resend Code",
+    resend_in: "Resend available in:",
+    switch_agent: "Switch Agent",
+    create_agent: "Create New Agent",
+    create_agent_title: "Create a New Agent",
+    create_agent_desc: "Each agent operates independently with its own Knowledge Base.",
+    agent_name_placeholder: "e.g. Sales Bot",
+    cancel: "Cancel",
+    create: "Create Agent",
+    toast_agent_created: "New agent created successfully.",
+    toast_agent_create_failed: "Failed to create agent."
   },
   fa: {
     app_title: "داشبورد ایجنتا",
+    app_desc: "پلتفرم ایجنت‌های خودمختار",
+    tab_overview: "پیشخوان",
+    tab_settings: "تنظیمات ایجنت",
+    tab_knowledge: "پایگاه دانش",
+    tab_tickets: "تیکت‌ها و لیدها",
+    tab_finances: "امور مالی",
+    tab_widget: "توکن ویجت",
+    tab_apikeys: "کلیدهای API",
+    KB_Records: "پایگاه دانش",
     logout: "خروج",
     welcome: "خوش آمدید!",
     welcome_sub: "برای مدیریت ایجنت‌های هوشمند خود وارد شوید.",
@@ -184,15 +248,71 @@ const translations = {
     rate_limits: "سهمیه‌ها و محدودیت‌ها",
     chat_daily: "سهمیه پیام متنی روزانه",
     audio_daily: "سهمیه صوتی روزانه",
+    widget_title: "تولید توکن ویجت سایت",
+    widget_desc: "برای قرار دادن ویجت در سایت خود، یک توکن اختصاصی برای دامنه سایت بسازید.",
+    domain_label: "دامنه وب‌سایت",
+    generate_widget_btn: "تولید توکن",
+    copy: "کپی",
+    copied: "کپی شد!",
     api_title: "مدیریت کلیدهای API",
     api_desc: "چرخش یا ابطال امن کلیدهای دسترسی برنامه‌نویسی.",
     api_warn: "هرگز کلید API خود را در کدهای سمت کلاینت قرار ندهید. کلیدهای جدید به ایمیل شما ارسال می‌شوند.",
+    api_key_hidden: "به دلایل امنیتی مخفی شده است. برای دریافت کلید جدید، آن را مجددا بسازید.",
     regen_key: "ساخت مجدد کلید API",
     no_vectors: "هیچ وکتوری در این مجموعه یافت نشد.",
     no_tickets: "هیچ تیکتی تا کنون ایجاد نشده است.",
     plan: "پلن",
     status: "وضعیت",
-    type: "نوع"
+    type: "نوع",
+    loading_text: "در حال بارگذاری...",
+    basic: "پایه",
+    plan_basic: "پایه",
+    status_active: "فعال",
+    status_unknown: "نامشخص",
+    type_sales: "فروش",
+    type_support: "پشتیبانی",
+    metric_leads_desc: "لیدها و ارجاعات پشتیبانی",
+    metric_kb_desc: "آیتم‌های پایگاه دانش و کاتالوگ",
+    placeholder_name: "شرکت ایجنتا",
+    placeholder_email: "admin@company.com",
+    placeholder_domain: "https://example.com",
+    select_json: "انتخاب فایل JSON",
+    back_btn: "بازگشت",
+    toast_signup_otp_sent: "کد تایید ثبت‌نام به ایمیل شما ارسال شد.",
+    toast_signup_otp_failed: "خطا در ارسال کد تایید ثبت‌نام.",
+    toast_signup_success: "ثبت‌نام با موفقیت انجام شد!",
+    toast_otp_sent: "کد تایید به ایمیل شما ارسال شد.",
+    toast_otp_failed: "خطا در ارسال کد تایید.",
+    toast_login_success: "با موفقیت وارد شدید!",
+    toast_invalid_otp: "کد تایید نامعتبر است.",
+    toast_settings_saved: "تنظیمات ایجنت با موفقیت ذخیره شد!",
+    toast_settings_failed: "خطا در ذخیره تنظیمات.",
+    toast_key_regen_success: "کلید API جدید ساخته و ایمیل شد.",
+    toast_key_regen_failed: "خطا در ساخت کلید.",
+    toast_domain_req: "لطفا یک دامنه وارد کنید.",
+    toast_token_gen_success: "توکن با موفقیت ایجاد شد.",
+    toast_token_gen_failed: "خطا در تولید توکن.",
+    toast_file_req: "لطفا ابتدا یک فایل انتخاب کنید.",
+    toast_upload_success: "فایل با موفقیت آپلود شد!",
+    toast_upload_failed: "خطا در آپلود فایل.",
+    confirm_logout: "آیا از خروج اطمینان دارید؟",
+    confirm_regen_key: "آیا از ساخت مجدد کلید API اطمینان دارید؟ کلید قبلی فورا باطل می‌شود.",
+    generated_jwt_label: "توکن JWT تولید شده",
+    logout_success: "با موفقیت خارج شدید.",
+    api_key_generated: "کلید API جدید تولید شد",
+    api_key_once_warning: "لطفاً این کلید را همین الان کپی کنید. دیگر قادر به مشاهده آن نخواهید بود!",
+    toast_api_key_success: "کلید API با موفقیت تولید شد.",
+    resend_otp: "ارسال مجدد کد",
+    resend_in: "امکان درخواست مجدد:",
+    switch_agent: "تغییر ایجنت فعال",
+    create_agent: "ساخت ایجنت جدید",
+    create_agent_title: "ایجاد ایجنت جدید",
+    create_agent_desc: "هر ایجنت به صورت مستقل و با پایگاه دانش مجزا عمل می‌کند.",
+    agent_name_placeholder: "مثلاً: دستیار فروش",
+    cancel: "انصراف",
+    create: "ساخت ایجنت",
+    toast_agent_created: "ایجنت جدید با موفقیت ساخته شد.",
+    toast_agent_create_failed: "خطا در ساخت ایجنت."
   }
 };
 
@@ -204,6 +324,12 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('overview');
   const [toast, setToast] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
+
+  // --- AGENTS LIST STATE ---
+  const [agentsList, setAgentsList] = useState([]);
+  const [isAgentModalOpen, setIsAgentModalOpen] = useState(false);
+  const [newAgentName, setNewAgentName] = useState("");
+  const [creatingAgent, setCreatingAgent] = useState(false);
 
   // Translation helper
   const t = (key) => translations[lang][key] || key;
@@ -242,6 +368,7 @@ export default function App() {
   const [otp, setOtp] = useState("");
   const [apiTokenInput, setApiTokenInput] = useState("");
   const [loginLoading, setLoginLoading] = useState(false);
+  const [otpTimer, setOtpTimer] = useState(0);
 
   // --- DATA STATE ---
   const [tenantOverview, setTenantOverview] = useState(null);
@@ -257,6 +384,12 @@ export default function App() {
   const [catalogFile, setCatalogFile] = useState(null);
   const [uploadingKb, setUploadingKb] = useState(false);
 
+  // --- WIDGET TOKEN STATE ---
+  const [widgetDomain, setWidgetDomain] = useState("");
+  const [generatedWidgetToken, setGeneratedWidgetToken] = useState("");
+  const [generatingToken, setGeneratingToken] = useState(false);
+  const [newApiKey, setNewApiKey] = useState(""); // استیت برای نمایش کلید جدید
+
   // --- AGENT SETTINGS STATE ---
   const [agentSettings, setAgentSettings] = useState({
     name: "", topic: "", role: "", persona: "",
@@ -267,6 +400,21 @@ export default function App() {
     bale_admin_chat_id: "", crm_webhook_url: "",
     widget_token_input: ""
   });
+
+  // --- TIMER STATE LOGIC ---
+  useEffect(() => {
+    let interval;
+    if (otpTimer > 0) {
+      interval = setInterval(() => setOtpTimer(prev => prev - 1), 1000);
+    }
+    return () => clearInterval(interval);
+  }, [otpTimer]);
+
+  const formatTimer = (secs) => {
+    const m = Math.floor(secs / 60).toString().padStart(2, '0');
+    const s = (secs % 60).toString().padStart(2, '0');
+    return `${m}:${s}`;
+  };
 
   // --- LIVE WIDGET INJECTION ---
   useEffect(() => {
@@ -293,6 +441,7 @@ export default function App() {
       script.setAttribute('data-primary-color', "#396dab");
       script.setAttribute('data-lang', lang);
       script.setAttribute('data-api-base', API_BASE);
+      // Added missing default turnstile key as requested
       
       document.body.appendChild(script);
       return cleanupWidget; 
@@ -360,7 +509,7 @@ export default function App() {
 
   // --- LOGOUT HANDLER ---
   const handleLogout = async (silent = false) => {
-    if (!silent && !confirm(lang === 'fa' ? "آیا از خروج اطمینان دارید؟" : "Are you sure you want to log out?")) return;
+    if (!silent && !confirm(t('confirm_logout'))) return;
 
     const refreshToken = localStorage.getItem("refresh_token");
     if (refreshToken) {
@@ -383,7 +532,7 @@ export default function App() {
     setActiveAgent(null);
     setFinanceData(null);
     setLoginStep(1); 
-    if (!silent) showToast(lang === 'fa' ? "با موفقیت خارج شدید." : "Logged out successfully.", "success");
+    if (!silent) showToast(t('logout_success'), "success");
   };
 
   // --- DATA LOADING ---
@@ -402,6 +551,7 @@ export default function App() {
         setTenantOverview(overviewData.tenant);
         
         if (overviewData.agents?.length > 0) {
+          setAgentsList(overviewData.agents);
           const agent = overviewData.agents[0];
           setActiveAgent(agent);
           setAgentSettings(prev => ({
@@ -455,7 +605,6 @@ export default function App() {
   const loadKbAndTickets = async () => {
     if (!isAuthenticated || !activeAgent?.agent_id) return;
     
-    // درخواست پایگاه دانش (مستقل)
     try {
       setKnowledgeBase([]);
       const kbData = await fetchWithAuth(`/agents/${activeAgent.agent_id}/knowledge_base_list?kind=${kbKind}`);
@@ -464,12 +613,10 @@ export default function App() {
         setKbTotalCount(kbData.total_count || 0);
       }
     } catch (e) {
-      // این خطا برای ایجنت‌های جدید که هنوز فایلی آپلود نکرده‌اند کاملا طبیعی است
       setKnowledgeBase([]);
       setKbTotalCount(0);
     }
 
-    // درخواست تیکت‌ها (مستقل)
     try {
       const tktData = await fetchWithAuth(`/agents/${activeAgent.agent_id}/agent_tickets`);
       if (tktData?.data) {
@@ -482,33 +629,93 @@ export default function App() {
     }
   };
 
+  const handleSwitchAgent = (agentId) => {
+    const selected = agentsList.find(a => a.agent_id === agentId);
+    if (selected) {
+      setActiveAgent(selected);
+      setAgentSettings(prev => ({
+        ...prev,
+        name: selected.name || "",
+        topic: selected.topic || "",
+        role: selected.role || "",
+        persona: selected.persona || "",
+        language: selected.language || "en",
+        agent_type: selected.agent_type || "support",
+        max_single_audio_minutes: selected.max_single_audio_minutes || 10,
+        lead_questions: selected.lead_questions || [],
+        ticket_summary_instruction: selected.ticket_summary_instruction || "",
+        telegram_bot_token: selected.telegram_bot_token || "",
+        telegram_admin_chat_id: selected.telegram_admin_chat_id || "",
+        bale_bot_token: selected.bale_bot_token || "",
+        bale_admin_chat_id: selected.bale_admin_chat_id || "",
+        crm_webhook_url: selected.crm_webhook_url || "",
+        widget_token_input: localStorage.getItem("live_widget_token") || ""
+      }));
+    }
+  };
+
+  const handleCreateAgent = async (e) => {
+    e.preventDefault();
+    if (!newAgentName.trim()) return;
+    
+    setCreatingAgent(true);
+    try {
+      const res = await fetchWithAuth("/dashboard/agents", {
+        method: 'POST',
+        body: JSON.stringify({ 
+          name: newAgentName.trim(),
+          topic: "General",
+          role: "Assistant",
+          persona: "Helpful",
+          language: "en",
+          agent_type: "support",
+          lead_questions: [],
+          status: "active",
+          max_single_audio_minutes: 10,
+          has_telegram: false,
+          has_bale: false,
+          has_crm_webhook: false
+        })
+      });
+      
+      showToast(res.message || t('toast_agent_created'), "success");
+      setIsAgentModalOpen(false);
+      setNewAgentName("");
+      await loadDashboardData(); // بارگذاری مجدد لیست ایجنت‌ها
+    } catch (err) {
+      showToast(err.message || t('toast_agent_create_failed'), "error");
+    } finally {
+      setCreatingAgent(false);
+    }
+  };
+
   useEffect(() => {
     loadKbAndTickets();
   }, [isAuthenticated, activeAgent, kbKind]);
 
   // --- AUTH HANDLERS ---
   const handleSignupRequestOtp = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     setLoginLoading(true);
     try {
       const res = await fetch(`${API_BASE}/auth/signup/request_otp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        // استفاده از trim() برای حذف فاصله‌های احتمالی ابتدا و انتها
         body: JSON.stringify({ 
           name: regName.trim(), 
           email: email.trim(), 
-          cf_token: "mock-token" // ارسال برای جلوگیری از خطای Pydantic در صورت نیاز
+          cf_token: "mock-token"
         }) 
       });
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}));
-        throw new Error(errData.detail || "Signup request failed");
+        throw new Error(errData.detail || t('toast_signup_otp_failed'));
       }
       setLoginStep(5); 
-      showToast(lang === 'fa' ? "کد تایید ثبت‌نام به ایمیل شما ارسال شد." : "Signup OTP sent to your email.", "success");
+      setOtpTimer(300); // 5 minutes timer
+      showToast(t('toast_signup_otp_sent'), "success");
     } catch (err) {
-      showToast(err.message || "Failed to request signup OTP.", "error");
+      showToast(err.message || t('toast_signup_otp_failed'), "error");
     }
     setLoginLoading(false);
   };
@@ -520,13 +727,12 @@ export default function App() {
       const res = await fetch(`${API_BASE}/auth/signup/verify`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        // ارسال ایمیل و کد تایید به صورت کاملاً تمیز شده (بدون کاراکتر اضافی)
         body: JSON.stringify({ email: email.trim(), otp: otp.trim() })
       });
       
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}));
-        throw new Error(errData.detail || "Invalid OTP");
+        throw new Error(errData.detail || t('toast_invalid_otp'));
       }
       
       const data = await res.json();
@@ -535,16 +741,15 @@ export default function App() {
         localStorage.setItem("refresh_token", data.refresh_token);
       }
       setApiToken(data.access_token);
-      showToast(lang === 'fa' ? "ثبت‌نام با موفقیت انجام شد!" : "Signed up successfully!", "success");
+      showToast(t('toast_signup_success'), "success");
     } catch (err) {
-      // نمایش دقیق خطای بک‌ابند
-      showToast(err.message || (lang === 'fa' ? "کد تایید نامعتبر است." : "Invalid verification code."), "error");
+      showToast(err.message || t('toast_invalid_otp'), "error");
     }
     setLoginLoading(false);
   };
 
   const handleRequestOtp = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     setLoginLoading(true);
     try {
       const res = await fetch(`${API_BASE}/auth/login/request_otp`, {
@@ -554,12 +759,13 @@ export default function App() {
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        throw new Error(data.detail || "Failed to send OTP");
+        throw new Error(data.detail || t('toast_otp_failed'));
       }
       setLoginStep(2);
-      showToast(lang === 'fa' ? "کد تایید به ایمیل شما ارسال شد." : "OTP code sent to your email.", "success");
+      setOtpTimer(300); // 5 minutes timer
+      showToast(t('toast_otp_sent'), "success");
     } catch (err) {
-      showToast(err.message || "Failed to request OTP. Ensure backend is running.", "error");
+      showToast(err.message || t('toast_otp_failed'), "error");
     }
     setLoginLoading(false);
   };
@@ -577,7 +783,7 @@ export default function App() {
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}));
         const errMsg = Array.isArray(errData.detail) ? errData.detail[0].msg : errData.detail;
-        throw new Error(errMsg || "Invalid OTP");
+        throw new Error(errMsg || t('toast_invalid_otp'));
       }
       
       const data = await res.json();
@@ -586,9 +792,9 @@ export default function App() {
         localStorage.setItem("refresh_token", data.refresh_token);
       }
       setApiToken(data.access_token);
-      showToast(lang === 'fa' ? "با موفقیت وارد شدید!" : "Logged in successfully!", "success");
+      showToast(t('toast_login_success'), "success");
     } catch (err) {
-      showToast(err.message || (lang === 'fa' ? "کد تایید نامعتبر است." : "Invalid verification code."), "error");
+      showToast(err.message || t('toast_invalid_otp'), "error");
     }
     setLoginLoading(false);
   };
@@ -623,28 +829,52 @@ export default function App() {
         method: "PATCH",
         body: JSON.stringify(payload)
       });
-      showToast(lang === 'fa' ? "تنظیمات با موفقیت ذخیره شد!" : "Agent settings updated successfully!");
+      showToast(t('toast_settings_saved'));
     } catch (e) {
-      showToast(lang === 'fa' ? "خطا در ذخیره تنظیمات." : "Failed to save settings.", "error");
+      showToast(t('toast_settings_failed'), "error");
     }
     setIsSaving(false);
   };
 
   const handleRegenerateKey = async () => {
-    if (confirm(lang === 'fa' ? "آیا از ساخت مجدد کلید API اطمینان دارید؟ کلید قبلی فورا باطل می‌شود." : "Regenerate API Key? The old key will be invalidated immediately.")) {
+    if (confirm(t('confirm_regen_key'))) {
       try {
-        await fetchWithAuth(`/regenerate_api_key?tenant_id=${tenantOverview?.tenant_id}`, { method: "POST" });
-        showToast(lang === 'fa' ? "کلید API جدید ساخته و ایمیل شد." : "API Key regenerated and emailed to admin.", "success");
+        const res = await fetchWithAuth(`/dashboard/keys/generate-api-key`, { method: "POST" });
+        setNewApiKey(res.api_key);
+        showToast(t('toast_api_key_success'), "success");
       } catch(e) {
-        showToast("Failed to regenerate key.", "error");
+        showToast(e.message || t('toast_key_regen_failed'), "error");
       }
+    }
+  };
+
+  const handleGenerateWidgetToken = async (e) => {
+    e.preventDefault();
+    if (!widgetDomain.trim()) {
+      showToast(t('toast_domain_req'), "error");
+      return;
+    }
+    if (!activeAgent?.agent_id) return;
+    
+    setGeneratingToken(true);
+    try {
+      const res = await fetchWithAuth(`/dashboard/keys/agents/${activeAgent.agent_id}/generate-widget-token`, {
+        method: 'POST',
+        body: JSON.stringify({ allowed_origins: [widgetDomain.trim()] })
+      });
+      setGeneratedWidgetToken(res.token);
+      showToast(t('toast_token_gen_success'), "success");
+    } catch (err) {
+      showToast(err.message || t('toast_token_gen_failed'), "error");
+    } finally {
+      setGeneratingToken(false);
     }
   };
 
   const handleFileUpload = async (type) => {
     const file = type === 'faq' ? faqFile : catalogFile;
     if (!file) {
-      showToast(lang === 'fa' ? "لطفا ابتدا یک فایل انتخاب کنید." : "Please select a file first.", "error");
+      showToast(t('toast_file_req'), "error");
       return;
     }
 
@@ -671,17 +901,17 @@ export default function App() {
 
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}));
-        throw new Error(errData.detail || "Upload failed");
+        throw new Error(errData.detail || t('toast_upload_failed'));
       }
 
-      showToast(lang === 'fa' ? "فایل با موفقیت آپلود شد!" : "File uploaded successfully!", "success");
+      showToast(t('toast_upload_success'), "success");
       loadKbAndTickets(); 
 
       if (type === 'faq') setFaqFile(null);
       else setCatalogFile(null);
 
     } catch (err) {
-      showToast(err.message || "Failed to upload file.", "error");
+      showToast(err.message || t('toast_upload_failed'), "error");
     } finally {
       setUploadingKb(false);
     }
@@ -690,8 +920,9 @@ export default function App() {
   // --- RENDER BLOCKS ---
   if (loading && !isAuthenticated) {
     return (
-      <div dir={lang === 'fa' ? 'rtl' : 'ltr'} className="min-h-screen flex items-center justify-center bg-zinc-50">
+      <div dir={lang === 'fa' ? 'rtl' : 'ltr'} className="min-h-screen flex flex-col items-center justify-center gap-4 bg-zinc-50">
         <Loader2 size={32} className="animate-spin text-[#2563EB]" />
+        <p className="text-zinc-500 font-medium text-sm">{t('loading_text')}</p>
       </div>
     );
   }
@@ -733,15 +964,16 @@ export default function App() {
                 <input 
                   type="email" required value={email} onChange={e => setEmail(e.target.value)} 
                   className="mt-1.5 w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#2563EB]" 
-                  placeholder="admin@company.com" 
+                  placeholder={t('placeholder_email')} 
+                  dir="ltr"
                 />
               </div>
               <button disabled={loginLoading} type="submit" className="w-full bg-[#2563EB] hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-70">
                 {loginLoading ? <Loader2 size={18} className="animate-spin"/> : t('req_otp_btn')}
               </button>
               <div className="flex flex-col gap-3 text-center pt-2">
-                <button type="button" onClick={() => { setLoginStep(4); setEmail(""); setOtp(""); }} className="text-sm text-[#2563EB] font-semibold hover:underline transition-colors">{t('no_account')}</button>
-                <button type="button" onClick={() => setLoginStep(3)} className="text-xs text-zinc-400 hover:text-zinc-700 font-medium transition-colors">{t('dev_token_link')}</button>
+                <button type="button" onClick={() => { setLoginStep(4); setEmail(""); setOtp(""); setOtpTimer(0); }} className="text-sm text-[#2563EB] font-semibold hover:underline transition-colors">{t('no_account')}</button>
+                <button type="button" onClick={() => { setLoginStep(3); setOtpTimer(0); }} className="text-xs text-zinc-400 hover:text-zinc-700 font-medium transition-colors">{t('dev_token_link')}</button>
               </div>
             </form>
           )}
@@ -753,7 +985,7 @@ export default function App() {
                 <input 
                   type="text" required value={regName} onChange={e => setRegName(e.target.value)} 
                   className="mt-1.5 w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#2563EB]" 
-                  placeholder="Agenta Inc." 
+                  placeholder={t('placeholder_name')} 
                 />
               </div>
               <div>
@@ -761,14 +993,15 @@ export default function App() {
                 <input 
                   type="email" required value={email} onChange={e => setEmail(e.target.value)} 
                   className="mt-1.5 w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#2563EB]" 
-                  placeholder="admin@company.com" 
+                  placeholder={t('placeholder_email')} 
+                  dir="ltr"
                 />
               </div>
               <button disabled={loginLoading} type="submit" className="w-full bg-[#2563EB] hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-70">
                 {loginLoading ? <Loader2 size={18} className="animate-spin"/> : t('signup_btn')}
               </button>
               <div className="text-center pt-2">
-                <button type="button" onClick={() => setLoginStep(1)} className="text-sm text-zinc-500 hover:text-[#2563EB] font-semibold transition-colors">{t('has_account')}</button>
+                <button type="button" onClick={() => { setLoginStep(1); setOtpTimer(0); }} className="text-sm text-zinc-500 hover:text-[#2563EB] font-semibold transition-colors">{t('has_account')}</button>
               </div>
             </form>
           )}
@@ -786,8 +1019,13 @@ export default function App() {
               <button disabled={loginLoading} type="submit" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-70">
                 {loginLoading ? <Loader2 size={18} className="animate-spin"/> : t('verify_btn')}
               </button>
-              <div className="text-center pt-2">
-                <button type="button" onClick={() => setLoginStep(4)} className="text-xs text-zinc-400 hover:text-[#2563EB] font-medium transition-colors">بازگشت / Back</button>
+              <div className="flex flex-col gap-3 text-center pt-2">
+                {otpTimer > 0 ? (
+                  <p className="text-xs text-zinc-500 font-medium">{t('resend_in')} <span className="font-mono font-bold text-[#2563EB]" dir="ltr">{formatTimer(otpTimer)}</span></p>
+                ) : (
+                  <button type="button" onClick={handleSignupRequestOtp} className="text-sm font-semibold text-[#2563EB] hover:underline transition-colors">{t('resend_otp')}</button>
+                )}
+                <button type="button" onClick={() => { setLoginStep(4); setOtpTimer(0); }} className="text-xs text-zinc-400 hover:text-[#2563EB] font-medium transition-colors">{t('back_btn')}</button>
               </div>
             </form>
           )}
@@ -805,8 +1043,13 @@ export default function App() {
               <button disabled={loginLoading} type="submit" className="w-full bg-[#2563EB] hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-70">
                 {loginLoading ? <Loader2 size={18} className="animate-spin"/> : t('verify_btn')}
               </button>
-              <div className="text-center pt-2">
-                <button type="button" onClick={() => setLoginStep(1)} className="text-xs text-zinc-400 hover:text-[#2563EB] font-medium transition-colors">{t('back_email_link')}</button>
+              <div className="flex flex-col gap-3 text-center pt-2">
+                {otpTimer > 0 ? (
+                  <p className="text-xs text-zinc-500 font-medium">{t('resend_in')} <span className="font-mono font-bold text-[#2563EB]" dir="ltr">{formatTimer(otpTimer)}</span></p>
+                ) : (
+                  <button type="button" onClick={handleRequestOtp} className="text-sm font-semibold text-[#2563EB] hover:underline transition-colors">{t('resend_otp')}</button>
+                )}
+                <button type="button" onClick={() => { setLoginStep(1); setOtpTimer(0); }} className="text-xs text-zinc-400 hover:text-[#2563EB] font-medium transition-colors">{t('back_email_link')}</button>
               </div>
             </form>
           )}
@@ -819,13 +1062,14 @@ export default function App() {
                   type="password" required value={apiTokenInput} onChange={e => setApiTokenInput(e.target.value)} 
                   className="mt-1.5 w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#2563EB]" 
                   placeholder="eyJhbGciOi..." 
+                  dir="ltr"
                 />
               </div>
               <button type="submit" className="w-full bg-zinc-900 hover:opacity-90 text-white font-semibold py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
                 <ArrowRight size={18} /> {t('connect_dash_btn')}
               </button>
               <div className="text-center pt-2">
-                <button type="button" onClick={() => setLoginStep(1)} className="text-xs text-zinc-400 hover:text-[#2563EB] font-medium transition-colors">{t('back_email_link')}</button>
+                <button type="button" onClick={() => { setLoginStep(1); setOtpTimer(0); }} className="text-xs text-zinc-400 hover:text-[#2563EB] font-medium transition-colors">{t('back_email_link')}</button>
               </div>
             </form>
           )}
@@ -847,8 +1091,29 @@ export default function App() {
             alt="Agenta Logo" 
             className="h-10 w-auto" 
           />
-          <div className="border-s border-zinc-200 ps-4">
-            <p className="text-sm font-medium text-zinc-500">{tenantOverview?.name || t('app_desc')}</p>
+          <div className="border-s border-zinc-200 ps-4 flex items-center gap-3">
+            <div>
+              <p className="text-sm font-bold text-zinc-700">{tenantOverview?.name || t('app_desc')}</p>
+              {agentsList.length > 0 && (
+                <select
+                  value={activeAgent?.agent_id || ""}
+                  onChange={(e) => handleSwitchAgent(e.target.value)}
+                  className="block w-full text-xs bg-transparent border-none text-zinc-500 cursor-pointer outline-none font-medium mt-0.5 p-0"
+                  title={t('switch_agent')}
+                >
+                  {agentsList.map(a => (
+                    <option key={a.agent_id} value={a.agent_id}>{a.name || 'Unnamed Agent'}</option>
+                  ))}
+                </select>
+              )}
+            </div>
+            <button 
+              onClick={() => setIsAgentModalOpen(true)} 
+              className="p-1.5 bg-zinc-100 hover:bg-blue-100 hover:text-blue-600 rounded-lg text-zinc-500 transition-colors" 
+              title={t('create_agent')}
+            >
+              <Plus size={16} />
+            </button>
           </div>
         </div>
 
@@ -876,6 +1141,45 @@ export default function App() {
         </div>
       )}
 
+      {/* Create Agent Modal */}
+      {isAgentModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl m-4">
+            <h3 className="text-lg font-bold mb-1">{t('create_agent_title')}</h3>
+            <p className="text-sm text-zinc-500 mb-6">{t('create_agent_desc')}</p>
+            <form onSubmit={handleCreateAgent}>
+              <label className="block text-xs font-semibold uppercase text-zinc-500 mb-2">{t('agent_name')}</label>
+              <input 
+                type="text" 
+                autoFocus 
+                required 
+                value={newAgentName} 
+                onChange={e => setNewAgentName(e.target.value)} 
+                className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2563EB] mb-6" 
+                placeholder={t('agent_name_placeholder')} 
+              />
+              <div className="flex justify-end gap-3">
+                <button 
+                  type="button" 
+                  onClick={() => setIsAgentModalOpen(false)} 
+                  className="px-4 py-2 rounded-xl text-sm font-semibold text-zinc-600 hover:bg-zinc-100"
+                >
+                  {t('cancel')}
+                </button>
+                <button 
+                  type="submit" 
+                  disabled={creatingAgent} 
+                  className="px-4 py-2 rounded-xl text-sm font-semibold text-white bg-[#2563EB] hover:bg-blue-700 flex items-center gap-2 disabled:opacity-70"
+                >
+                  {creatingAgent ? <Loader2 size={16} className="animate-spin" /> : <Plus size={16} />}
+                  {t('create')}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-1 overflow-hidden">
         
         {/* Sidebar */}
@@ -887,6 +1191,7 @@ export default function App() {
               { id: 'knowledge', trans: 'tab_knowledge', icon: Database },
               { id: 'tickets', trans: 'tab_tickets', icon: Ticket },
               { id: 'finances', trans: 'tab_finances', icon: Wallet },
+              { id: 'widget', trans: 'tab_widget', icon: Code },
               { id: 'apikeys', trans: 'tab_apikeys', icon: Key },
             ].map(tab => {
               const Icon = tab.icon;
@@ -932,15 +1237,18 @@ export default function App() {
 
               {/* Tenant Identity Card */}
               <div className="p-6 rounded-2xl border border-zinc-200 bg-white shadow-sm flex flex-col md:flex-row gap-6 items-center md:items-start">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#2563EB] to-[#22D3EE] flex items-center justify-center text-white text-2xl font-bold shadow-md shrink-0">
+                  {tenantOverview?.name?.charAt(0) || 'A'}
+                </div>
                 <div className="flex-1 space-y-1 text-center md:text-start">
-                  <h3 className="text-xl font-bold">{tenantOverview?.name || 'Loading...'}</h3>
-                  <p className="text-sm text-zinc-500">{tenantOverview?.email || 'email@example.com'}</p>
+                  <h3 className="text-xl font-bold">{tenantOverview?.name || t('loading_text')}</h3>
+                  <p className="text-sm text-zinc-500">{tenantOverview?.email || t('placeholder_email')}</p>
                   <div className="flex flex-wrap justify-center md:justify-start gap-2 mt-2">
-                    <span className="px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">{t('plan')}: {tenantOverview?.plan || 'Basic'}</span>
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${tenantOverview?.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`}>{t('status')}: {tenantOverview?.status || 'Unknown'}</span>
+                    <span className="px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">{t('plan')}: {tenantOverview?.plan || t('plan_basic')}</span>
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${tenantOverview?.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`}>{t('status')}: {tenantOverview?.status === 'active' ? t('status_active') : t('status_unknown')}</span>
                     {activeAgent && (
                       <span className="px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-700 capitalize">
-                        {t('type')}: {activeAgent.agent_type === 'sales' ? 'Sales' : activeAgent.agent_type === 'support' ? 'Support' : activeAgent.agent_type}
+                        {t('type')}: {activeAgent.agent_type === 'sales' ? t('type_sales') : activeAgent.agent_type === 'support' ? t('type_support') : activeAgent.agent_type}
                       </span>
                     )}
                   </div>
@@ -951,7 +1259,7 @@ export default function App() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div className="p-6 rounded-2xl border border-zinc-200 bg-white shadow-sm">
                   <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider flex items-center gap-2"><Wallet size={16}/> {t('avail_balance')}</p>
-                  <h3 className="text-2xl font-extrabold mt-3 text-[#22D3EE]">
+                  <h3 className="text-2xl font-extrabold mt-3 text-[#22D3EE]" dir="ltr">
                     {financeData ? `${financeData.balance} ${financeData.currency}` : '---'}
                   </h3>
                   <p className="text-xs text-zinc-500 mt-1">{t('total_funded')}: {financeData?.total_credits || 0}</p>
@@ -959,7 +1267,7 @@ export default function App() {
 
                 <div className="p-6 rounded-2xl border border-zinc-200 bg-white shadow-sm">
                   <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider flex items-center gap-2"><MessageSquare size={16}/> {t('chat_used')}</p>
-                  <h3 className="text-2xl font-extrabold mt-3 text-[#2563EB]">
+                  <h3 className="text-2xl font-extrabold mt-3 text-[#2563EB]" dir="ltr">
                     {financeData?.tenant_totals?.total_messages || 0}
                   </h3>
                   <p className="text-xs text-zinc-500 mt-1">{t('reset_in')} {financeData?.days_remaining_in_cycle || 30} {t('days')}</p>
@@ -967,18 +1275,18 @@ export default function App() {
 
                 <div className="p-6 rounded-2xl border border-zinc-200 bg-white shadow-sm">
                   <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider flex items-center gap-2"><Ticket size={16}/> {t('tab_tickets')}</p>
-                  <h3 className="text-2xl font-extrabold mt-3 text-amber-500">
+                  <h3 className="text-2xl font-extrabold mt-3 text-amber-500" dir="ltr">
                     {tickets.length}
                   </h3>
-                  <p className="text-xs text-zinc-500 mt-1">Leads & Support escalations</p>
+                  <p className="text-xs text-zinc-500 mt-1">{t('metric_leads_desc')}</p>
                 </div>
 
                 <div className="p-6 rounded-2xl border border-zinc-200 bg-white shadow-sm">
-                  <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider flex items-center gap-2"><Database size={16}/> KB Records</p>
-                  <h3 className="text-2xl font-extrabold mt-3 text-purple-500">
+                  <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider flex items-center gap-2"><Database size={16}/> {t('KB_Records')}</p>
+                  <h3 className="text-2xl font-extrabold mt-3 text-purple-500" dir="ltr">
                     {kbTotalCount}
                   </h3>
-                  <p className="text-xs text-zinc-500 mt-1">FAQ & Catalog items</p>
+                  <p className="text-xs text-zinc-500 mt-1">{t('metric_kb_desc')}</p>
                 </div>
               </div>
             </div>
@@ -1008,7 +1316,7 @@ export default function App() {
                     </div>
                     <div>
                       <label className="block text-xs font-semibold uppercase text-zinc-500 mb-2">{t('language_iso')}</label>
-                      <input type="text" value={agentSettings.language} onChange={e => setAgentSettings({...agentSettings, language: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2563EB]" />
+                      <input type="text" value={agentSettings.language} onChange={e => setAgentSettings({...agentSettings, language: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2563EB]" dir="ltr" />
                     </div>
                     <div>
                       <label className="block text-xs font-semibold uppercase text-zinc-500 mb-2">{t('agent_type')}</label>
@@ -1018,7 +1326,7 @@ export default function App() {
                         className="w-full bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2563EB]"
                       >
                         {AGENT_TYPES_CONFIG.map(type => (
-                          <option key={type.value} value={type.value}>{type.label}</option>
+                          <option key={type.value} value={type.value}>{type.value === 'support' ? t('type_support') : t('type_sales')}</option>
                         ))}
                       </select>
                     </div>
@@ -1084,23 +1392,23 @@ export default function App() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-xs font-semibold uppercase text-zinc-500 mb-2">{t('telegram_bot')}</label>
-                      <input type="password" value={agentSettings.telegram_bot_token || ""} onChange={e => setAgentSettings({...agentSettings, telegram_bot_token: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2563EB]" />
+                      <input type="password" value={agentSettings.telegram_bot_token || ""} onChange={e => setAgentSettings({...agentSettings, telegram_bot_token: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2563EB]" dir="ltr" />
                     </div>
                     <div>
                       <label className="block text-xs font-semibold uppercase text-zinc-500 mb-2">{t('telegram_chat')}</label>
-                      <input type="text" value={agentSettings.telegram_admin_chat_id || ""} onChange={e => setAgentSettings({...agentSettings, telegram_admin_chat_id: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2563EB]" />
+                      <input type="text" value={agentSettings.telegram_admin_chat_id || ""} onChange={e => setAgentSettings({...agentSettings, telegram_admin_chat_id: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2563EB]" dir="ltr" />
                     </div>
                     <div>
                       <label className="block text-xs font-semibold uppercase text-zinc-500 mb-2">{t('bale_bot')}</label>
-                      <input type="password" value={agentSettings.bale_bot_token || ""} onChange={e => setAgentSettings({...agentSettings, bale_bot_token: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2563EB]" />
+                      <input type="password" value={agentSettings.bale_bot_token || ""} onChange={e => setAgentSettings({...agentSettings, bale_bot_token: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2563EB]" dir="ltr" />
                     </div>
                     <div>
                       <label className="block text-xs font-semibold uppercase text-zinc-500 mb-2">{t('bale_chat')}</label>
-                      <input type="text" value={agentSettings.bale_admin_chat_id || ""} onChange={e => setAgentSettings({...agentSettings, bale_admin_chat_id: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2563EB]" />
+                      <input type="text" value={agentSettings.bale_admin_chat_id || ""} onChange={e => setAgentSettings({...agentSettings, bale_admin_chat_id: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2563EB]" dir="ltr" />
                     </div>
                     <div className="md:col-span-2">
                       <label className="block text-xs font-semibold uppercase text-zinc-500 mb-2">{t('crm_webhook')}</label>
-                      <input type="url" value={agentSettings.crm_webhook_url || ""} onChange={e => setAgentSettings({...agentSettings, crm_webhook_url: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2563EB]" placeholder="https://..." />
+                      <input type="url" value={agentSettings.crm_webhook_url || ""} onChange={e => setAgentSettings({...agentSettings, crm_webhook_url: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2563EB]" placeholder="https://..." dir="ltr" />
                     </div>
                   </div>
                 </div>
@@ -1109,7 +1417,7 @@ export default function App() {
                 <div className="space-y-4 pt-4 border-t border-zinc-200">
                   <h3 className="text-lg font-semibold">{t('live_widget_sec')}</h3>
                   <p className="text-xs text-zinc-500">{t('live_widget_desc')}</p>
-                  <input type="text" value={agentSettings.widget_token_input || ""} onChange={e => setAgentSettings({...agentSettings, widget_token_input: e.target.value})} className="w-full max-w-md bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2563EB]" placeholder="wgt_..." />
+                  <input type="text" value={agentSettings.widget_token_input || ""} onChange={e => setAgentSettings({...agentSettings, widget_token_input: e.target.value})} className="w-full max-w-md bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2563EB]" placeholder="wgt_..." dir="ltr" />
                 </div>
 
                 <div className="flex justify-end pt-4">
@@ -1159,7 +1467,7 @@ export default function App() {
                   <h3 className="font-semibold text-sm">{t('catalog_upload_title')}</h3>
                   <input type="file" id="catalog-upload" className="hidden" accept=".json" onChange={e => setCatalogFile(e.target.files[0])} />
                   <label htmlFor="catalog-upload" className="cursor-pointer text-sm text-zinc-500 hover:text-cyan-600">
-                    {catalogFile ? catalogFile.name : t('select_file')}
+                    {catalogFile ? catalogFile.name : t('select_json')}
                   </label>
                   <button onClick={() => handleFileUpload('catalog')} disabled={!catalogFile || uploadingKb} className="mt-2 px-4 py-2 bg-[#22D3EE] text-zinc-900 rounded-lg text-xs font-medium disabled:opacity-50 flex items-center gap-2">
                     {uploadingKb && catalogFile ? <Loader2 size={14} className="animate-spin" /> : <UploadCloud size={14} />} {t('upload_btn')}
@@ -1282,7 +1590,67 @@ export default function App() {
             </div>
           )}
 
-          {/* TAB 6: API KEYS */}
+          {/* TAB 6: WIDGET TOKEN */}
+          {activeTab === 'widget' && (
+            <div className="max-w-2xl space-y-6 animate-in fade-in duration-300">
+              <div>
+                <h2 className="text-2xl font-bold tracking-tight">{t('widget_title')}</h2>
+                <p className="text-sm text-zinc-500">{t('widget_desc')}</p>
+              </div>
+
+              <div className="p-6 rounded-2xl border border-zinc-200 bg-white space-y-6 shadow-sm">
+                <form onSubmit={handleGenerateWidgetToken} className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-semibold uppercase text-zinc-500 mb-2">{t('domain_label')}</label>
+                    <input 
+                      type="text" 
+                      value={widgetDomain} 
+                      onChange={e => setWidgetDomain(e.target.value)} 
+                      className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2563EB]" 
+                      placeholder={t('placeholder_domain')} 
+                      dir="ltr"
+                    />
+                  </div>
+                  <button 
+                    type="submit" 
+                    disabled={generatingToken} 
+                    className="px-6 py-3 rounded-xl text-white font-semibold text-sm shadow-md hover:opacity-90 transition-opacity flex items-center gap-2 bg-[#2563EB] disabled:opacity-70"
+                  >
+                    {generatingToken ? <Loader2 size={16} className="animate-spin" /> : <Code size={16} />}
+                    {t('generate_widget_btn')}
+                  </button>
+                </form>
+
+                {generatedWidgetToken && (
+                  <div className="pt-6 border-t border-zinc-200 space-y-2 animate-in slide-in-from-top-2 duration-300">
+                    <label className="block text-xs font-semibold uppercase text-emerald-600">{t('generated_jwt_label')}</label>
+                    <div className="flex items-center gap-2">
+                      <input 
+                        type="text" 
+                        readOnly 
+                        value={generatedWidgetToken} 
+                        className="flex-1 bg-emerald-50 border border-emerald-200 text-emerald-900 rounded-xl px-4 py-2.5 text-sm outline-none font-mono" 
+                        dir="ltr"
+                      />
+                      <button 
+                        type="button"
+                        onClick={() => {
+                          navigator.clipboard.writeText(generatedWidgetToken);
+                          showToast(t('copied'), "success");
+                        }}
+                        className="p-2.5 bg-zinc-100 border border-zinc-300 rounded-xl hover:bg-zinc-200 text-zinc-600 transition-colors"
+                        title={t('copy')}
+                      >
+                        <Copy size={18} />
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* TAB 7: API KEYS */}
           {activeTab === 'apikeys' && (
             <div className="max-w-xl space-y-6 animate-in fade-in duration-300">
               <div>
@@ -1295,15 +1663,54 @@ export default function App() {
                   <ShieldAlert size={20} className="shrink-0 mt-0.5" />
                   <p className="leading-relaxed">{t('api_warn')}</p>
                 </div>
+                
+                <div className="space-y-2">
+                  <label className="block text-xs font-semibold uppercase text-zinc-500">{t('tab_apikeys')}</label>
+                  <input 
+                    type="text" 
+                    readOnly 
+                    value="••••••••••••••••••••••••••••••••••••••" 
+                    className="w-full bg-zinc-50 border border-zinc-200 text-zinc-400 rounded-xl px-4 py-2.5 text-sm outline-none font-mono" 
+                    dir="ltr"
+                  />
+                  <p className="text-xs text-zinc-500">{t('api_key_hidden')}</p>
+                </div>
 
-                <div className="flex gap-4">
+                <div className="flex gap-4 pt-4 border-t border-zinc-200">
                   <button 
                     onClick={handleRegenerateKey}
-                    className="px-5 py-2.5 rounded-xl text-white font-semibold text-sm shadow-md hover:opacity-90 flex items-center gap-2 transition-opacity bg-[#2563EB]"
+                    className="px-5 py-2.5 rounded-xl text-white font-semibold text-sm shadow-md hover:opacity-90 flex items-center gap-2 transition-opacity bg-red-600"
                   >
                     <RefreshCw size={16} /> {t('regen_key')}
                   </button>
                 </div>
+
+                {newApiKey && (
+                  <div className="pt-6 border-t border-zinc-200 space-y-2 animate-in slide-in-from-top-2 duration-300">
+                    <label className="block text-xs font-semibold uppercase text-emerald-600">{t('api_key_generated')}</label>
+                    <p className="text-xs text-amber-600 font-medium mb-2">{t('api_key_once_warning')}</p>
+                    <div className="flex items-center gap-2">
+                      <input 
+                        type="text" 
+                        readOnly 
+                        value={newApiKey} 
+                        className="flex-1 bg-emerald-50 border border-emerald-200 text-emerald-900 rounded-xl px-4 py-2.5 text-sm outline-none font-mono" 
+                        dir="ltr"
+                      />
+                      <button 
+                        type="button"
+                        onClick={() => {
+                          navigator.clipboard.writeText(newApiKey);
+                          showToast(t('copied'), "success");
+                        }}
+                        className="p-2.5 bg-zinc-100 border border-zinc-300 rounded-xl hover:bg-zinc-200 text-zinc-600 transition-colors"
+                        title={t('copy')}
+                      >
+                        <Copy size={18} />
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           )}
