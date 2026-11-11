@@ -3,14 +3,14 @@ import {
   LayoutDashboard, Settings, Database, Ticket, 
   Wallet, Key, Plus, Trash2, 
   RefreshCw, CheckCircle2, ShieldAlert, AlertCircle,
-  LogOut, Loader2, ArrowRight, UploadCloud, FileText, Upload, MessageSquare, Globe, Code, Copy
+  LogOut, Loader2, ArrowRight, UploadCloud, FileText, Upload, MessageSquare, Globe, Code, Copy, Mic
 } from 'lucide-react';
 
 const API_BASE = "http://localhost:8000";
 
 const AGENT_TYPES_CONFIG = [
-  { value: "support", label: "Support" },
-  { value: "sales", label: "Sales" }
+  { value: "sales", label: "Sales" },
+  { value: "support", label: "Support" }
 ];
 
 // --- TRANSLATION DICTIONARY ---
@@ -25,7 +25,7 @@ const translations = {
     tab_finances: "Finances & Quota",
     tab_widget: "Widget Token",
     tab_apikeys: "API Keys",
-    KB_Records: "KKnowledge Base Records",
+    KB_Records: "Knowledge Base Records",
     logout: "Logout",
     welcome: "Welcome back!",
     welcome_sub: "Sign in to manage your AI Autonomous Agents.",
@@ -162,7 +162,29 @@ const translations = {
     cancel: "Cancel",
     create: "Create Agent",
     toast_agent_created: "New agent created successfully.",
-    toast_agent_create_failed: "Failed to create agent."
+    toast_agent_create_failed: "Failed to create agent.",
+    audioAnalysisTab: "Audio Analysis",
+    uploadAudioTitle: "Call & Audio Intelligence",
+    uploadAudioDesc: "Upload recorded calls for automated transcription, sentiment analysis, and sales/support intelligence.",
+    selectAudioFile: "Select Audio File (.mp3, .wav, .m4a, .ogg)",
+    transcriptMode: "Transcript Mode",
+    modeFull: "Full Transcript (+0.5 CRD)",
+    modeSummary: "Summary Only",
+    analysisModules: "Intelligence Modules",
+    modSales: "Sales Intelligence (+0.5 CRD)",
+    modService: "Service Intelligence (+0.5 CRD)",
+    modRisk: "Risk Detection (+0.25 CRD)",
+    modCoaching: "Agent Coaching (+0.25 CRD)",
+    startAnalysisBtn: "Start Audio Analysis",
+    analyzingAudio: "Processing Audio...",
+    audioQueuedMsg: "Audio queued for analysis. Job ID:",
+    audioPollingMsg: "Waiting for AI processing to complete...",
+    audioCompletedMsg: "Audio analysis completed successfully!",
+    audioFailedMsg: "Audio analysis failed:",
+    selectFileError: "Please select an audio file first.",
+    jobIdLabel: "Job ID",
+    statusLabel: "Status",
+    analysisResultTitle: "Analysis Results"
   },
   fa: {
     app_title: "داشبورد ایجنتا",
@@ -312,7 +334,29 @@ const translations = {
     cancel: "انصراف",
     create: "ساخت ایجنت",
     toast_agent_created: "ایجنت جدید با موفقیت ساخته شد.",
-    toast_agent_create_failed: "خطا در ساخت ایجنت."
+    toast_agent_create_failed: "خطا در ساخت ایجنت.",
+    audioAnalysisTab: "تحلیل تماس صوتی",
+    uploadAudioTitle: "هوش مصنوعی تحلیل مکالمات",
+    uploadAudioDesc: "فایل صوتی مکالمات را برای پیاده‌سازی متن، تحلیل احساسات و استخراج نکات فروش و پشتیبانی آپلود کنید.",
+    selectAudioFile: "انتخاب فایل صوتی (.mp3, .wav, .m4a, .ogg)",
+    transcriptMode: "حالت پیاده‌سازی متن (Transcript)",
+    modeFull: "متن کامل مکالمه (+0.5 اعتبار)",
+    modeSummary: "فقط خلاصه مکالمه",
+    analysisModules: "ماژول‌های تحلیلی",
+    modSales: "هوش فروش - Sales (+0.5 اعتبار)",
+    modService: "هوش پشتیبانی - Service (+0.5 اعتبار)",
+    modRisk: "تشخیص ریسک (+0.25 اعتبار)",
+    modCoaching: "کوچینگ اپراتور (+0.25 اعتبار)",
+    startAnalysisBtn: "شروع تحلیل صوتی",
+    analyzingAudio: "در حال پردازش صوت...",
+    audioQueuedMsg: "فایل صوتی در صف پردازش قرار گرفت. شناسه:",
+    audioPollingMsg: "در انتظار تکمیل پردازش هوش مصنوعی...",
+    audioCompletedMsg: "تحلیل فایل صوتی با موفقیت انجام شد!",
+    audioFailedMsg: "خطا در تحلیل صوت:",
+    selectFileError: "لطفاً ابتدا یک فایل صوتی انتخاب کنید.",
+    jobIdLabel: "شناسه پردازش (Job ID)",
+    statusLabel: "وضعیت",
+    analysisResultTitle: "نتایج تحلیل مکالمه"
   }
 };
 
@@ -359,7 +403,7 @@ export default function App() {
 
   // --- TOKENS ---
   const [apiToken, setApiToken] = useState(localStorage.getItem("access_token") || "");
-  const [liveWidgetToken, setLiveWidgetToken] = useState(localStorage.getItem("live_widget_token") || "");
+  const [liveWidgetToken, setLiveWidgetToken] = useState("");
 
   // --- LOGIN UI STATE ---
   const [loginStep, setLoginStep] = useState(1);
@@ -401,6 +445,144 @@ export default function App() {
     widget_token_input: ""
   });
 
+  // --- Audio Analysis States ---
+  const [audioFile, setAudioFile] = useState(null);
+  const [transcriptMode, setTranscriptMode] = useState("Full"); // "Full" | "Summary"
+  const [selectedModules, setSelectedModules] = useState(["SalesIntelligence"]);
+  const [audioJobId, setAudioJobId] = useState(null);
+  const [audioStatus, setAudioStatus] = useState(null); // "Queued" | "Processing" | "Completed" | "Failed"
+  const [audioResult, setAudioResult] = useState(null);
+  const [isAnalyzingAudio, setIsAnalyzingAudio] = useState(false);
+  const audioPollTimerRef = useRef(null);
+
+  // پاکسازی تایمر Polling هنگام تغییر ایجنت یا خروج از صفحه
+  useEffect(() => {
+    return () => {
+      if (audioPollTimerRef.current) {
+        clearTimeout(audioPollTimerRef.current);
+      }
+    };
+  }, [activeAgent?.agent_id]);
+
+  // مدیریت انتخاب ماژول‌های تحلیلی
+  const handleToggleAudioModule = (modName) => {
+    setSelectedModules((prev) =>
+      prev.includes(modName)
+        ? prev.filter((m) => m !== modName)
+        : [...prev, modName]
+    );
+  };
+
+  // ۱. تابع استعلام وضعیت و دریافت نتیجه (Polling)
+  const pollAudioAnalysisResult = async (agentId, jobId, delaySeconds = 30) => {
+    if (audioPollTimerRef.current) clearTimeout(audioPollTimerRef.current);
+
+    audioPollTimerRef.current = setTimeout(async () => {
+      try {
+        const data = await fetchWithAuth(
+          `/agents/${agentId}/audio-analysis/${jobId}/audio_analysis_result`,
+          { method: "GET" }
+        );
+
+        // اگر هنوز در صف یا در حال پردازش است (HTTP 202)
+        if (data.status === "Processing" || data.status === "Queued") {
+          setAudioStatus(data.status || "Processing");
+          const nextPoll = 30;
+          pollAudioAnalysisResult(agentId, jobId, nextPoll);
+          return;
+        }
+
+        // اگر پردازش با خطا مواجه شده باشد
+        if (data.status === "Failed") {
+          const errMsg = data?.error?.message || data?.detail || "Processing failed";
+          setAudioStatus("Failed");
+          setIsAnalyzingAudio(false);
+          showToast(`${t("audioFailedMsg")} ${errMsg}`, "error");
+          return;
+        }
+
+        // اگر پردازش با موفقیت کامل شده باشد (HTTP 200 & status === "Completed")
+        if (data.status === "Completed" || data) {
+          setAudioStatus("Completed");
+          setAudioResult(data);
+          setIsAnalyzingAudio(false);
+          showToast(t("audioCompletedMsg"), "success");
+          // بروزرسانی اطلاعات مالی داشبورد پس از کسر اعتبار
+          if (typeof loadDashboardData === "function") {
+            loadDashboardData();
+          }
+        }
+      } catch (err) {
+        console.error("Audio polling error:", err);
+        setAudioStatus("Failed");
+        setIsAnalyzingAudio(false);
+        showToast(err.message || t("audioFailedMsg"), "error");
+      }
+    }, delaySeconds * 1000);
+  };
+
+  // ۲. تابع ارسال فایل صوتی و شروع تحلیل
+  const handleStartAudioAnalysis = async (e) => {
+    e.preventDefault();
+    if (!audioFile) {
+      showToast(t("selectFileError"), "error");
+      return;
+    }
+    if (!activeAgent?.agent_id) return;
+
+    setIsAnalyzingAudio(true);
+    setAudioResult(null);
+    setAudioStatus("Queued");
+    setAudioJobId(null);
+
+    try {
+      // ساخت Payload مطابق مدل AudioAnalysisRequestPayload در بک‌اند
+      const payloadObj = {
+        api_version: "1.0",
+        request_id: `req_${Date.now()}`,
+        call_id: `call_${Date.now()}`,
+        transcript_mode: transcriptMode,
+        modules: selectedModules,
+        language: activeAgent.language || "fa"
+      };
+
+      const formData = new FormData();
+      formData.append("file", audioFile);
+      formData.append("request_payload", JSON.stringify(payloadObj));
+
+      // ارسال فایل صوتی (توجه: برای FormData نباید Content-Type دستی ست شود)
+      const token = localStorage.getItem("access_token");
+      const res = await fetch(`${API_BASE}/agents/${activeAgent.agent_id}/audio-analysis`, {
+        method: "POST",
+        headers: {
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
+        },
+        body: formData
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.detail || "Failed to upload audio for analysis");
+      }
+
+      // دریافت پاسخ 202 Accepted
+      setAudioJobId(data.job_id);
+      setAudioStatus(data.status || "Queued");
+      showToast(`${t("audioQueuedMsg")} ${data.job_id}`, "success");
+
+      // شروع چرخه Polling بر اساس ۳۰ ثانیه
+      const pollDelay = 30;
+      pollAudioAnalysisResult(activeAgent.agent_id, data.job_id, pollDelay);
+
+    } catch (err) {
+      console.error("Audio upload error:", err);
+      setAudioStatus("Failed");
+      setIsAnalyzingAudio(false);
+      showToast(err.message, "error");
+    }
+  };
+
   // --- TIMER STATE LOGIC ---
   useEffect(() => {
     let interval;
@@ -441,7 +623,6 @@ export default function App() {
       script.setAttribute('data-primary-color', "#396dab");
       script.setAttribute('data-lang', lang);
       script.setAttribute('data-api-base', API_BASE);
-      // Added missing default turnstile key as requested
       
       document.body.appendChild(script);
       return cleanupWidget; 
@@ -527,6 +708,7 @@ export default function App() {
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
     setApiToken("");
+    setLiveWidgetToken("");
     setIsAuthenticated(false);
     setTenantOverview(null);
     setActiveAgent(null);
@@ -553,7 +735,13 @@ export default function App() {
         if (overviewData.agents?.length > 0) {
           setAgentsList(overviewData.agents);
           const agent = overviewData.agents[0];
+          const savedWidgetToken = (
+            agent.widget_token ||
+            localStorage.getItem(`live_widget_token_${agent.agent_id}`) ||
+            ""
+          ).trim();
           setActiveAgent(agent);
+          setLiveWidgetToken(savedWidgetToken);
           setAgentSettings(prev => ({
             ...prev,
             name: agent.name || "",
@@ -570,7 +758,7 @@ export default function App() {
             bale_bot_token: agent.bale_bot_token || "",
             bale_admin_chat_id: agent.bale_admin_chat_id || "",
             crm_webhook_url: agent.crm_webhook_url || "",
-            widget_token_input: liveWidgetToken
+            widget_token_input: savedWidgetToken
           }));
         }
         setIsAuthenticated(true);
@@ -632,7 +820,14 @@ export default function App() {
   const handleSwitchAgent = (agentId) => {
     const selected = agentsList.find(a => a.agent_id === agentId);
     if (selected) {
+      const savedWidgetToken = (
+        selected.widget_token ||
+        localStorage.getItem(`live_widget_token_${selected.agent_id}`) ||
+        ""
+      ).trim();
       setActiveAgent(selected);
+      setLiveWidgetToken(savedWidgetToken);
+      setGeneratedWidgetToken("");
       setAgentSettings(prev => ({
         ...prev,
         name: selected.name || "",
@@ -649,7 +844,7 @@ export default function App() {
         bale_bot_token: selected.bale_bot_token || "",
         bale_admin_chat_id: selected.bale_admin_chat_id || "",
         crm_webhook_url: selected.crm_webhook_url || "",
-        widget_token_input: localStorage.getItem("live_widget_token") || ""
+        widget_token_input: savedWidgetToken
       }));
     }
   };
@@ -812,10 +1007,17 @@ export default function App() {
     if (!activeAgent) return;
     setIsSaving(true);
     
-    if (agentSettings.widget_token_input) {
-      localStorage.setItem("live_widget_token", agentSettings.widget_token_input);
-      setLiveWidgetToken(agentSettings.widget_token_input);
+    const trimmedWidgetToken = (agentSettings.widget_token_input || "").trim();
+    if (trimmedWidgetToken) {
+      localStorage.setItem(`live_widget_token_${activeAgent.agent_id}`, trimmedWidgetToken);
+      setLiveWidgetToken(trimmedWidgetToken);
+    } else {
+      localStorage.removeItem(`live_widget_token_${activeAgent.agent_id}`);
+      setLiveWidgetToken("");
     }
+    setAgentsList(prev => prev.map(a => 
+      a.agent_id === activeAgent.agent_id ? { ...a, widget_token: trimmedWidgetToken } : a
+    ));
 
     const payload = { ...agentSettings };
     delete payload.widget_token_input;
@@ -862,7 +1064,16 @@ export default function App() {
         method: 'POST',
         body: JSON.stringify({ allowed_origins: [widgetDomain.trim()] })
       });
-      setGeneratedWidgetToken(res.token);
+      const newToken = (res.token || "").trim();
+      setGeneratedWidgetToken(newToken);
+      if (newToken) {
+        localStorage.setItem(`live_widget_token_${activeAgent.agent_id}`, newToken);
+        setLiveWidgetToken(newToken);
+        setAgentSettings(prev => ({ ...prev, widget_token_input: newToken }));
+        setAgentsList(prev => prev.map(a => 
+          a.agent_id === activeAgent.agent_id ? { ...a, widget_token: newToken } : a
+        ));
+      }
       showToast(t('toast_token_gen_success'), "success");
     } catch (err) {
       showToast(err.message || t('toast_token_gen_failed'), "error");
@@ -1193,6 +1404,7 @@ export default function App() {
               { id: 'finances', trans: 'tab_finances', icon: Wallet },
               { id: 'widget', trans: 'tab_widget', icon: Code },
               { id: 'apikeys', trans: 'tab_apikeys', icon: Key },
+              { id: 'audio', trans: 'audioAnalysisTab', icon: Mic },
             ].map(tab => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -1712,6 +1924,135 @@ export default function App() {
                   </div>
                 )}
               </div>
+            </div>
+          )}
+
+          {/* TAB 8: AUDIO ANALYSIS */}
+          {activeTab === 'audio' && (
+            <div className="space-y-6">
+              <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <h2 className="text-lg font-bold text-slate-800 mb-1">{t('uploadAudioTitle')}</h2>
+                <p className="text-sm text-slate-500 mb-6">{t('uploadAudioDesc')}</p>
+
+                <form onSubmit={handleStartAudioAnalysis} className="space-y-5">
+                  {/* انتخاب فایل صوتی */}
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      {t('selectAudioFile')}
+                    </label>
+                    <input
+                      type="file"
+                      accept=".mp3,.wav,.m4a,.ogg,audio/*"
+                      onChange={(e) => setAudioFile(e.target.files[0] || null)}
+                      disabled={isAnalyzingAudio}
+                      className="block w-full text-sm text-slate-600 file:me-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer border border-slate-300 rounded-lg p-1.5"
+                    />
+                  </div>
+
+                  {/* انتخاب حالت پیاده‌سازی متن (Transcript Mode) */}
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      {t('transcriptMode')}
+                    </label>
+                    <select
+                      value={transcriptMode}
+                      onChange={(e) => setTranscriptMode(e.target.value)}
+                      disabled={isAnalyzingAudio}
+                      className="w-full md:w-1/2 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-800 focus:ring-2 focus:ring-indigo-500 outline-none"
+                    >
+                      <option value="Full">{t('modeFull')}</option>
+                      <option value="Summary">{t('modeSummary')}</option>
+                    </select>
+                  </div>
+
+                  {/* انتخاب ماژول‌های هوش مصنوعی ( مطابق محاسبه هزینه در main.py ) */}
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      {t('analysisModules')}
+                    </label>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {[
+                        { id: "SalesIntelligence", label: t('modSales') },
+                        { id: "ServiceIntelligence", label: t('modService') },
+                        { id: "Risk", label: t('modRisk') },
+                        { id: "Coaching", label: t('modCoaching') },
+                      ].map((mod) => (
+                        <label
+                          key={mod.id}
+                          className="flex items-center space-x-2 space-x-reverse bg-slate-50 p-3 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-100"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={selectedModules.includes(mod.id)}
+                            onChange={() => handleToggleAudioModule(mod.id)}
+                            disabled={isAnalyzingAudio}
+                            className="rounded text-indigo-600 focus:ring-indigo-500 h-4 w-4 me-2"
+                          />
+                          <span className="text-sm text-slate-700">{mod.label}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* دکمه ارسال */}
+                  <button
+                    type="submit"
+                    disabled={isAnalyzingAudio || !audioFile}
+                    className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-400 text-white font-medium rounded-lg text-sm transition flex items-center gap-2"
+                  >
+                    {isAnalyzingAudio ? (
+                      <>
+                        <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>
+                        <span>{t('analyzingAudio')}</span>
+                      </>
+                    ) : (
+                      <span>{t('startAnalysisBtn')}</span>
+                    )}
+                  </button>
+                </form>
+              </div>
+
+              {/* نمایش وضعیت Job و نتایج تحلیل */}
+              {audioStatus && (
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 space-y-4">
+                  <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+                    <div>
+                      <span className="text-xs text-slate-500 block">{t('jobIdLabel')}</span>
+                      <code className="text-sm font-mono text-slate-800">{audioJobId || "---"}</code>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-slate-500">{t('statusLabel')}:</span>
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                          audioStatus === "Completed"
+                            ? "bg-emerald-100 text-emerald-700"
+                            : audioStatus === "Failed"
+                            ? "bg-red-100 text-red-700"
+                            : "bg-amber-100 text-amber-700 animate-pulse"
+                        }`}
+                      >
+                        {audioStatus}
+                      </span>
+                    </div>
+                  </div>
+
+                  {(audioStatus === "Queued" || audioStatus === "Processing") && (
+                    <p className="text-sm text-slate-600 flex items-center gap-2">
+                      <span className="h-2 w-2 bg-amber-500 rounded-full animate-ping"></span>
+                      {t('audioPollingMsg')}
+                    </p>
+                  )}
+
+                  {audioStatus === "Completed" && audioResult && (
+                    <div className="space-y-4">
+                      <h3 className="text-md font-bold text-slate-800">{t('analysisResultTitle')}</h3>
+                      <pre className="bg-slate-900 text-cyan-300 p-4 rounded-lg text-xs font-mono overflow-x-auto whitespace-pre-wrap leading-relaxed" dir="ltr">
+                        {JSON.stringify(audioResult, null, 2)}
+                      </pre>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           )}
 
