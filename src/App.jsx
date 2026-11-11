@@ -6,7 +6,7 @@ import {
   LogOut, Loader2, ArrowRight, UploadCloud, FileText, Upload, MessageSquare, Globe, Code, Copy, Mic
 } from 'lucide-react';
 
-const API_BASE = "http://localhost:8000";
+const API_BASE = "https://api.aiagenta.ir";
 
 const AGENT_TYPES_CONFIG = [
   { value: "sales", label: "Sales" },
@@ -1133,7 +1133,7 @@ export default function App() {
     return (
       <div dir={lang === 'fa' ? 'rtl' : 'ltr'} className="min-h-screen flex flex-col items-center justify-center gap-4 bg-zinc-50">
         <Loader2 size={32} className="animate-spin text-[#2563EB]" />
-        <p className="text-zinc-500 font-medium text-sm">{t('loading_text')}</p>
+        <p className="text-zinc-500 font-medium text-base">{t('loading_text')}</p>
       </div>
     );
   }
@@ -1145,7 +1145,7 @@ export default function App() {
         <div className="bg-white border border-zinc-200 p-8 rounded-3xl shadow-xl w-full max-w-md animate-in fade-in zoom-in-95 duration-300 relative">
           
           <div className="absolute top-6 end-6">
-            <button onClick={() => { const newLang = lang === 'en' ? 'fa' : 'en'; setLang(newLang); localStorage.setItem('preferred_lang', newLang); }} className="text-xs font-bold p-2 text-zinc-500 hover:text-zinc-900 bg-zinc-100 rounded-lg">
+            <button onClick={() => { const newLang = lang === 'en' ? 'fa' : 'en'; setLang(newLang); localStorage.setItem('preferred_lang', newLang); }} className="text-sm font-bold p-2 text-zinc-500 hover:text-zinc-900 bg-zinc-100 rounded-lg">
               {lang === 'en' ? 'FA' : 'EN'}
             </button>
           </div>
@@ -1157,12 +1157,12 @@ export default function App() {
           <h2 className="text-2xl font-bold text-center mb-2 tracking-tight">
             {loginStep === 4 ? t('signup_title') : t('welcome')}
           </h2>
-          <p className="text-zinc-500 text-center text-sm mb-8">
+          <p className="text-zinc-500 text-center text-base mb-8">
             {loginStep === 4 ? t('signup_sub') : t('welcome_sub')}
           </p>
 
           {toast && (
-            <div className={`mb-6 p-3 rounded-xl text-sm font-medium flex items-center gap-2 ${toast.type === 'error' ? 'bg-red-50 text-red-600' : 'bg-emerald-50 text-emerald-600'}`}>
+            <div className={`mb-6 p-3 rounded-xl text-base font-medium flex items-center gap-2 ${toast.type === 'error' ? 'bg-red-50 text-red-600' : 'bg-emerald-50 text-emerald-600'}`}>
               {toast.type === 'error' ? <ShieldAlert size={18}/> : <CheckCircle2 size={18}/>}
               {toast.message}
             </div>
@@ -1171,10 +1171,10 @@ export default function App() {
           {loginStep === 1 && (
             <form onSubmit={handleRequestOtp} className="space-y-5">
               <div>
-                <label className="text-sm font-semibold text-zinc-700">{t('email_label')}</label>
+                <label className="text-base font-semibold text-zinc-700">{t('email_label')}</label>
                 <input 
                   type="email" required value={email} onChange={e => setEmail(e.target.value)} 
-                  className="mt-1.5 w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#2563EB]" 
+                  className="mt-1.5 w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-[#2563EB]" 
                   placeholder={t('placeholder_email')} 
                   dir="ltr"
                 />
@@ -1183,8 +1183,8 @@ export default function App() {
                 {loginLoading ? <Loader2 size={18} className="animate-spin"/> : t('req_otp_btn')}
               </button>
               <div className="flex flex-col gap-3 text-center pt-2">
-                <button type="button" onClick={() => { setLoginStep(4); setEmail(""); setOtp(""); setOtpTimer(0); }} className="text-sm text-[#2563EB] font-semibold hover:underline transition-colors">{t('no_account')}</button>
-                <button type="button" onClick={() => { setLoginStep(3); setOtpTimer(0); }} className="text-xs text-zinc-400 hover:text-zinc-700 font-medium transition-colors">{t('dev_token_link')}</button>
+                <button type="button" onClick={() => { setLoginStep(4); setEmail(""); setOtp(""); setOtpTimer(0); }} className="text-base text-[#2563EB] font-semibold hover:underline transition-colors">{t('no_account')}</button>
+                <button type="button" onClick={() => { setLoginStep(3); setOtpTimer(0); }} className="text-sm text-zinc-400 hover:text-zinc-700 font-medium transition-colors">{t('dev_token_link')}</button>
               </div>
             </form>
           )}
@@ -1192,18 +1192,18 @@ export default function App() {
           {loginStep === 4 && (
             <form onSubmit={handleSignupRequestOtp} className="space-y-5">
               <div>
-                <label className="text-sm font-semibold text-zinc-700">{t('name_label')}</label>
+                <label className="text-base font-semibold text-zinc-700">{t('name_label')}</label>
                 <input 
                   type="text" required value={regName} onChange={e => setRegName(e.target.value)} 
-                  className="mt-1.5 w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#2563EB]" 
+                  className="mt-1.5 w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-[#2563EB]" 
                   placeholder={t('placeholder_name')} 
                 />
               </div>
               <div>
-                <label className="text-sm font-semibold text-zinc-700">{t('email_label')}</label>
+                <label className="text-base font-semibold text-zinc-700">{t('email_label')}</label>
                 <input 
                   type="email" required value={email} onChange={e => setEmail(e.target.value)} 
-                  className="mt-1.5 w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#2563EB]" 
+                  className="mt-1.5 w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-[#2563EB]" 
                   placeholder={t('placeholder_email')} 
                   dir="ltr"
                 />
@@ -1212,7 +1212,7 @@ export default function App() {
                 {loginLoading ? <Loader2 size={18} className="animate-spin"/> : t('signup_btn')}
               </button>
               <div className="text-center pt-2">
-                <button type="button" onClick={() => { setLoginStep(1); setOtpTimer(0); }} className="text-sm text-zinc-500 hover:text-[#2563EB] font-semibold transition-colors">{t('has_account')}</button>
+                <button type="button" onClick={() => { setLoginStep(1); setOtpTimer(0); }} className="text-base text-zinc-500 hover:text-[#2563EB] font-semibold transition-colors">{t('has_account')}</button>
               </div>
             </form>
           )}
@@ -1220,7 +1220,7 @@ export default function App() {
           {loginStep === 5 && (
             <form onSubmit={handleVerifySignupOtp} className="space-y-5">
               <div>
-                <label className="text-sm font-semibold text-zinc-700">{t('otp_label')}</label>
+                <label className="text-base font-semibold text-zinc-700">{t('otp_label')}</label>
                 <input 
                   type="text" required value={otp} onChange={e => setOtp(e.target.value)} 
                   className="mt-1.5 w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#2563EB] tracking-[0.5em] text-center text-xl font-mono" 
@@ -1232,11 +1232,11 @@ export default function App() {
               </button>
               <div className="flex flex-col gap-3 text-center pt-2">
                 {otpTimer > 0 ? (
-                  <p className="text-xs text-zinc-500 font-medium">{t('resend_in')} <span className="font-mono font-bold text-[#2563EB]" dir="ltr">{formatTimer(otpTimer)}</span></p>
+                  <p className="text-sm text-zinc-500 font-medium">{t('resend_in')} <span className="font-mono font-bold text-[#2563EB]" dir="ltr">{formatTimer(otpTimer)}</span></p>
                 ) : (
-                  <button type="button" onClick={handleSignupRequestOtp} className="text-sm font-semibold text-[#2563EB] hover:underline transition-colors">{t('resend_otp')}</button>
+                  <button type="button" onClick={handleSignupRequestOtp} className="text-base font-semibold text-[#2563EB] hover:underline transition-colors">{t('resend_otp')}</button>
                 )}
-                <button type="button" onClick={() => { setLoginStep(4); setOtpTimer(0); }} className="text-xs text-zinc-400 hover:text-[#2563EB] font-medium transition-colors">{t('back_btn')}</button>
+                <button type="button" onClick={() => { setLoginStep(4); setOtpTimer(0); }} className="text-sm text-zinc-400 hover:text-[#2563EB] font-medium transition-colors">{t('back_btn')}</button>
               </div>
             </form>
           )}
@@ -1244,7 +1244,7 @@ export default function App() {
           {loginStep === 2 && (
             <form onSubmit={handleVerifyOtp} className="space-y-5">
               <div>
-                <label className="text-sm font-semibold text-zinc-700">{t('otp_label')}</label>
+                <label className="text-base font-semibold text-zinc-700">{t('otp_label')}</label>
                 <input 
                   type="text" required value={otp} onChange={e => setOtp(e.target.value)} 
                   className="mt-1.5 w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#2563EB] tracking-[0.5em] text-center text-xl font-mono" 
@@ -1256,11 +1256,11 @@ export default function App() {
               </button>
               <div className="flex flex-col gap-3 text-center pt-2">
                 {otpTimer > 0 ? (
-                  <p className="text-xs text-zinc-500 font-medium">{t('resend_in')} <span className="font-mono font-bold text-[#2563EB]" dir="ltr">{formatTimer(otpTimer)}</span></p>
+                  <p className="text-sm text-zinc-500 font-medium">{t('resend_in')} <span className="font-mono font-bold text-[#2563EB]" dir="ltr">{formatTimer(otpTimer)}</span></p>
                 ) : (
-                  <button type="button" onClick={handleRequestOtp} className="text-sm font-semibold text-[#2563EB] hover:underline transition-colors">{t('resend_otp')}</button>
+                  <button type="button" onClick={handleRequestOtp} className="text-base font-semibold text-[#2563EB] hover:underline transition-colors">{t('resend_otp')}</button>
                 )}
-                <button type="button" onClick={() => { setLoginStep(1); setOtpTimer(0); }} className="text-xs text-zinc-400 hover:text-[#2563EB] font-medium transition-colors">{t('back_email_link')}</button>
+                <button type="button" onClick={() => { setLoginStep(1); setOtpTimer(0); }} className="text-sm text-zinc-400 hover:text-[#2563EB] font-medium transition-colors">{t('back_email_link')}</button>
               </div>
             </form>
           )}
@@ -1268,10 +1268,10 @@ export default function App() {
           {loginStep === 3 && (
             <form onSubmit={handleDevLogin} className="space-y-5">
               <div>
-                <label className="text-sm font-semibold text-zinc-700">{t('dev_token_label')}</label>
+                <label className="text-base font-semibold text-zinc-700">{t('dev_token_label')}</label>
                 <input 
                   type="password" required value={apiTokenInput} onChange={e => setApiTokenInput(e.target.value)} 
-                  className="mt-1.5 w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#2563EB]" 
+                  className="mt-1.5 w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-[#2563EB]" 
                   placeholder="eyJhbGciOi..." 
                   dir="ltr"
                 />
@@ -1280,7 +1280,7 @@ export default function App() {
                 <ArrowRight size={18} /> {t('connect_dash_btn')}
               </button>
               <div className="text-center pt-2">
-                <button type="button" onClick={() => { setLoginStep(1); setOtpTimer(0); }} className="text-xs text-zinc-400 hover:text-[#2563EB] font-medium transition-colors">{t('back_email_link')}</button>
+                <button type="button" onClick={() => { setLoginStep(1); setOtpTimer(0); }} className="text-sm text-zinc-400 hover:text-[#2563EB] font-medium transition-colors">{t('back_email_link')}</button>
               </div>
             </form>
           )}
@@ -1304,12 +1304,12 @@ export default function App() {
           />
           <div className="border-s border-zinc-200 ps-4 flex items-center gap-3">
             <div>
-              <p className="text-sm font-bold text-zinc-700">{tenantOverview?.name || t('app_desc')}</p>
+              <p className="text-base font-bold text-zinc-700">{tenantOverview?.name || t('app_desc')}</p>
               {agentsList.length > 0 && (
                 <select
                   value={activeAgent?.agent_id || ""}
                   onChange={(e) => handleSwitchAgent(e.target.value)}
-                  className="block w-full text-xs bg-transparent border-none text-zinc-500 cursor-pointer outline-none font-medium mt-0.5 p-0"
+                  className="block w-full text-sm bg-transparent border-none text-zinc-500 cursor-pointer outline-none font-medium mt-0.5 p-0"
                   title={t('switch_agent')}
                 >
                   {agentsList.map(a => (
@@ -1335,7 +1335,7 @@ export default function App() {
               setLang(newLang);
               localStorage.setItem('preferred_lang', newLang);
             }}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-zinc-200 transition-colors text-sm font-semibold text-zinc-600"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-zinc-200 transition-colors text-base font-semibold text-zinc-600"
           >
             <Globe size={16} /> {lang === 'en' ? 'FA' : 'EN'}
           </button>
@@ -1348,7 +1348,7 @@ export default function App() {
           toast.type === 'error' ? 'bg-red-50 border-red-200 text-red-700' : 'bg-emerald-50 border-emerald-200 text-emerald-700'
         }`}>
           {toast.type === 'error' ? <AlertCircle size={20} /> : <CheckCircle2 size={20} />}
-          <span className="text-sm font-medium">{toast.message}</span>
+          <span className="text-base font-medium">{toast.message}</span>
         </div>
       )}
 
@@ -1357,30 +1357,30 @@ export default function App() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl m-4">
             <h3 className="text-lg font-bold mb-1">{t('create_agent_title')}</h3>
-            <p className="text-sm text-zinc-500 mb-6">{t('create_agent_desc')}</p>
+            <p className="text-base text-zinc-500 mb-6">{t('create_agent_desc')}</p>
             <form onSubmit={handleCreateAgent}>
-              <label className="block text-xs font-semibold uppercase text-zinc-500 mb-2">{t('agent_name')}</label>
+              <label className="block text-sm font-semibold uppercase text-zinc-500 mb-2">{t('agent_name')}</label>
               <input 
                 type="text" 
                 autoFocus 
                 required 
                 value={newAgentName} 
                 onChange={e => setNewAgentName(e.target.value)} 
-                className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2563EB] mb-6" 
+                className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-2.5 text-base outline-none focus:border-[#2563EB] mb-6" 
                 placeholder={t('agent_name_placeholder')} 
               />
               <div className="flex justify-end gap-3">
                 <button 
                   type="button" 
                   onClick={() => setIsAgentModalOpen(false)} 
-                  className="px-4 py-2 rounded-xl text-sm font-semibold text-zinc-600 hover:bg-zinc-100"
+                  className="px-4 py-2 rounded-xl text-base font-semibold text-zinc-600 hover:bg-zinc-100"
                 >
                   {t('cancel')}
                 </button>
                 <button 
                   type="submit" 
                   disabled={creatingAgent} 
-                  className="px-4 py-2 rounded-xl text-sm font-semibold text-white bg-[#2563EB] hover:bg-blue-700 flex items-center gap-2 disabled:opacity-70"
+                  className="px-4 py-2 rounded-xl text-base font-semibold text-white bg-[#2563EB] hover:bg-blue-700 flex items-center gap-2 disabled:opacity-70"
                 >
                   {creatingAgent ? <Loader2 size={16} className="animate-spin" /> : <Plus size={16} />}
                   {t('create')}
@@ -1412,7 +1412,7 @@ export default function App() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium transition-all ${
                     isActive 
                       ? 'bg-[#2563EB] text-white shadow-md' 
                       : 'text-zinc-600 hover:bg-zinc-100'
@@ -1428,7 +1428,7 @@ export default function App() {
           <div className="border-t border-zinc-200 pt-4 mt-4">
             <button
               onClick={() => handleLogout(false)}
-              className="flex w-full items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-red-600 hover:bg-red-50"
+              className="flex w-full items-center gap-3 px-4 py-3 rounded-xl text-base font-medium transition-all text-red-600 hover:bg-red-50"
             >
               <LogOut size={18} />
               {t('logout')}
@@ -1444,7 +1444,7 @@ export default function App() {
             <div className="space-y-6 animate-in fade-in duration-300">
               <div>
                 <h2 className="text-2xl font-bold tracking-tight">{t('overview_title')}</h2>
-                <p className="text-sm text-zinc-500">{t('overview_desc')}</p>
+                <p className="text-base text-zinc-500">{t('overview_desc')}</p>
               </div>
 
               {/* Tenant Identity Card */}
@@ -1454,12 +1454,12 @@ export default function App() {
                 </div>
                 <div className="flex-1 space-y-1 text-center md:text-start">
                   <h3 className="text-xl font-bold">{tenantOverview?.name || t('loading_text')}</h3>
-                  <p className="text-sm text-zinc-500">{tenantOverview?.email || t('placeholder_email')}</p>
+                  <p className="text-base text-zinc-500">{tenantOverview?.email || t('placeholder_email')}</p>
                   <div className="flex flex-wrap justify-center md:justify-start gap-2 mt-2">
-                    <span className="px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">{t('plan')}: {tenantOverview?.plan || t('plan_basic')}</span>
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${tenantOverview?.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`}>{t('status')}: {tenantOverview?.status === 'active' ? t('status_active') : t('status_unknown')}</span>
+                    <span className="px-3 py-1 rounded-full text-sm font-semibold bg-blue-100 text-blue-700">{t('plan')}: {tenantOverview?.plan || t('plan_basic')}</span>
+                    <span className={`px-3 py-1 rounded-full text-sm font-semibold ${tenantOverview?.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`}>{t('status')}: {tenantOverview?.status === 'active' ? t('status_active') : t('status_unknown')}</span>
                     {activeAgent && (
-                      <span className="px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-700 capitalize">
+                      <span className="px-3 py-1 rounded-full text-sm font-semibold bg-purple-100 text-purple-700 capitalize">
                         {t('type')}: {activeAgent.agent_type === 'sales' ? t('type_sales') : activeAgent.agent_type === 'support' ? t('type_support') : activeAgent.agent_type}
                       </span>
                     )}
@@ -1470,35 +1470,35 @@ export default function App() {
               {/* Metrics Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div className="p-6 rounded-2xl border border-zinc-200 bg-white shadow-sm">
-                  <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider flex items-center gap-2"><Wallet size={16}/> {t('avail_balance')}</p>
+                  <p className="text-sm font-semibold text-zinc-400 uppercase tracking-wider flex items-center gap-2"><Wallet size={16}/> {t('avail_balance')}</p>
                   <h3 className="text-2xl font-extrabold mt-3 text-[#22D3EE]" dir="ltr">
                     {financeData ? `${financeData.balance} ${financeData.currency}` : '---'}
                   </h3>
-                  <p className="text-xs text-zinc-500 mt-1">{t('total_funded')}: {financeData?.total_credits || 0}</p>
+                  <p className="text-sm text-zinc-500 mt-1">{t('total_funded')}: {financeData?.total_credits || 0}</p>
                 </div>
 
                 <div className="p-6 rounded-2xl border border-zinc-200 bg-white shadow-sm">
-                  <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider flex items-center gap-2"><MessageSquare size={16}/> {t('chat_used')}</p>
+                  <p className="text-sm font-semibold text-zinc-400 uppercase tracking-wider flex items-center gap-2"><MessageSquare size={16}/> {t('chat_used')}</p>
                   <h3 className="text-2xl font-extrabold mt-3 text-[#2563EB]" dir="ltr">
                     {financeData?.tenant_totals?.total_messages || 0}
                   </h3>
-                  <p className="text-xs text-zinc-500 mt-1">{t('reset_in')} {financeData?.days_remaining_in_cycle || 30} {t('days')}</p>
+                  <p className="text-sm text-zinc-500 mt-1">{t('reset_in')} {financeData?.days_remaining_in_cycle || 30} {t('days')}</p>
                 </div>
 
                 <div className="p-6 rounded-2xl border border-zinc-200 bg-white shadow-sm">
-                  <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider flex items-center gap-2"><Ticket size={16}/> {t('tab_tickets')}</p>
+                  <p className="text-sm font-semibold text-zinc-400 uppercase tracking-wider flex items-center gap-2"><Ticket size={16}/> {t('tab_tickets')}</p>
                   <h3 className="text-2xl font-extrabold mt-3 text-amber-500" dir="ltr">
                     {tickets.length}
                   </h3>
-                  <p className="text-xs text-zinc-500 mt-1">{t('metric_leads_desc')}</p>
+                  <p className="text-sm text-zinc-500 mt-1">{t('metric_leads_desc')}</p>
                 </div>
 
                 <div className="p-6 rounded-2xl border border-zinc-200 bg-white shadow-sm">
-                  <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider flex items-center gap-2"><Database size={16}/> {t('KB_Records')}</p>
+                  <p className="text-sm font-semibold text-zinc-400 uppercase tracking-wider flex items-center gap-2"><Database size={16}/> {t('KB_Records')}</p>
                   <h3 className="text-2xl font-extrabold mt-3 text-purple-500" dir="ltr">
                     {kbTotalCount}
                   </h3>
-                  <p className="text-xs text-zinc-500 mt-1">{t('metric_kb_desc')}</p>
+                  <p className="text-sm text-zinc-500 mt-1">{t('metric_kb_desc')}</p>
                 </div>
               </div>
             </div>
@@ -1509,7 +1509,7 @@ export default function App() {
             <div className="max-w-4xl space-y-6 animate-in fade-in duration-300">
               <div>
                 <h2 className="text-2xl font-bold tracking-tight">{t('settings_title')}</h2>
-                <p className="text-sm text-zinc-500">{t('settings_desc')}</p>
+                <p className="text-base text-zinc-500">{t('settings_desc')}</p>
               </div>
 
               <form onSubmit={handleSaveSettings} className="p-6 rounded-2xl border border-zinc-200 bg-white space-y-8 shadow-sm">
@@ -1519,23 +1519,23 @@ export default function App() {
                   <h3 className="text-lg font-semibold border-b border-zinc-200 pb-2">{t('identity_sec')}</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-xs font-semibold uppercase text-zinc-500 mb-2">{t('agent_name')}</label>
-                      <input type="text" value={agentSettings.name} onChange={e => setAgentSettings({...agentSettings, name: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2563EB]" />
+                      <label className="block text-sm font-semibold uppercase text-zinc-500 mb-2">{t('agent_name')}</label>
+                      <input type="text" value={agentSettings.name} onChange={e => setAgentSettings({...agentSettings, name: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-base outline-none focus:border-[#2563EB]" />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold uppercase text-zinc-500 mb-2">{t('domain_topic')}</label>
-                      <input type="text" value={agentSettings.topic} onChange={e => setAgentSettings({...agentSettings, topic: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2563EB]" />
+                      <label className="block text-sm font-semibold uppercase text-zinc-500 mb-2">{t('domain_topic')}</label>
+                      <input type="text" value={agentSettings.topic} onChange={e => setAgentSettings({...agentSettings, topic: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-base outline-none focus:border-[#2563EB]" />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold uppercase text-zinc-500 mb-2">{t('language_iso')}</label>
-                      <input type="text" value={agentSettings.language} onChange={e => setAgentSettings({...agentSettings, language: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2563EB]" dir="ltr" />
+                      <label className="block text-sm font-semibold uppercase text-zinc-500 mb-2">{t('language_iso')}</label>
+                      <input type="text" value={agentSettings.language} onChange={e => setAgentSettings({...agentSettings, language: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-base outline-none focus:border-[#2563EB]" dir="ltr" />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold uppercase text-zinc-500 mb-2">{t('agent_type')}</label>
+                      <label className="block text-sm font-semibold uppercase text-zinc-500 mb-2">{t('agent_type')}</label>
                       <select 
                         value={agentSettings.agent_type || "support"} 
                         onChange={e => setAgentSettings({...agentSettings, agent_type: e.target.value})} 
-                        className="w-full bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2563EB]"
+                        className="w-full bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-base outline-none focus:border-[#2563EB]"
                       >
                         {AGENT_TYPES_CONFIG.map(type => (
                           <option key={type.value} value={type.value}>{type.value === 'support' ? t('type_support') : t('type_sales')}</option>
@@ -1550,12 +1550,12 @@ export default function App() {
                   <h3 className="text-lg font-semibold border-b border-zinc-200 pb-2">{t('persona_sec')}</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-xs font-semibold uppercase text-zinc-500 mb-2">{t('role_desc')}</label>
-                      <textarea rows={3} value={agentSettings.role || ""} onChange={e => setAgentSettings({...agentSettings, role: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl p-4 text-sm outline-none focus:border-[#2563EB]" placeholder="..." />
+                      <label className="block text-sm font-semibold uppercase text-zinc-500 mb-2">{t('role_desc')}</label>
+                      <textarea rows={3} value={agentSettings.role || ""} onChange={e => setAgentSettings({...agentSettings, role: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl p-4 text-base outline-none focus:border-[#2563EB]" placeholder="..." />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold uppercase text-zinc-500 mb-2">{t('persona_inst')}</label>
-                      <textarea rows={3} value={agentSettings.persona || ""} onChange={e => setAgentSettings({...agentSettings, persona: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl p-4 text-sm outline-none focus:border-[#2563EB]" placeholder="..." />
+                      <label className="block text-sm font-semibold uppercase text-zinc-500 mb-2">{t('persona_inst')}</label>
+                      <textarea rows={3} value={agentSettings.persona || ""} onChange={e => setAgentSettings({...agentSettings, persona: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl p-4 text-base outline-none focus:border-[#2563EB]" placeholder="..." />
                     </div>
                   </div>
                 </div>
@@ -1564,7 +1564,7 @@ export default function App() {
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold border-b border-zinc-200 pb-2">{t('lead_sec')}</h3>
                   <div>
-                    <label className="block text-xs font-semibold uppercase text-zinc-500 mb-2">{t('lead_questions')}</label>
+                    <label className="block text-sm font-semibold uppercase text-zinc-500 mb-2">{t('lead_questions')}</label>
                     <div className="space-y-2">
                       {agentSettings.lead_questions.map((q, idx) => (
                         <div key={idx} className="flex gap-2">
@@ -1575,7 +1575,7 @@ export default function App() {
                               updated[idx] = e.target.value;
                               setAgentSettings({...agentSettings, lead_questions: updated});
                             }}
-                            className="flex-1 bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2 text-sm outline-none focus:border-[#2563EB]"
+                            className="flex-1 bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2 text-base outline-none focus:border-[#2563EB]"
                           />
                           <button type="button" onClick={() => {
                               const updated = agentSettings.lead_questions.filter((_, i) => i !== idx);
@@ -1587,14 +1587,14 @@ export default function App() {
                           </button>
                         </div>
                       ))}
-                      <button type="button" onClick={() => setAgentSettings({...agentSettings, lead_questions: [...agentSettings.lead_questions, ""]})} className="text-xs font-semibold text-[#2563EB] mt-2 flex items-center gap-1 hover:underline">
+                      <button type="button" onClick={() => setAgentSettings({...agentSettings, lead_questions: [...agentSettings.lead_questions, ""]})} className="text-sm font-semibold text-[#2563EB] mt-2 flex items-center gap-1 hover:underline">
                         <Plus size={16} /> {t('add_question')}
                       </button>
                     </div>
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold uppercase text-zinc-500 mb-2 mt-4">{t('ticket_summary_inst')}</label>
-                    <textarea rows={2} value={agentSettings.ticket_summary_instruction || ""} onChange={e => setAgentSettings({...agentSettings, ticket_summary_instruction: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl p-4 text-sm outline-none focus:border-[#2563EB]" />
+                    <label className="block text-sm font-semibold uppercase text-zinc-500 mb-2 mt-4">{t('ticket_summary_inst')}</label>
+                    <textarea rows={2} value={agentSettings.ticket_summary_instruction || ""} onChange={e => setAgentSettings({...agentSettings, ticket_summary_instruction: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl p-4 text-base outline-none focus:border-[#2563EB]" />
                   </div>
                 </div>
 
@@ -1603,24 +1603,24 @@ export default function App() {
                   <h3 className="text-lg font-semibold border-b border-zinc-200 pb-2">{t('integrations_sec')}</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-xs font-semibold uppercase text-zinc-500 mb-2">{t('telegram_bot')}</label>
-                      <input type="password" value={agentSettings.telegram_bot_token || ""} onChange={e => setAgentSettings({...agentSettings, telegram_bot_token: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2563EB]" dir="ltr" />
+                      <label className="block text-sm font-semibold uppercase text-zinc-500 mb-2">{t('telegram_bot')}</label>
+                      <input type="password" value={agentSettings.telegram_bot_token || ""} onChange={e => setAgentSettings({...agentSettings, telegram_bot_token: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-base outline-none focus:border-[#2563EB]" dir="ltr" />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold uppercase text-zinc-500 mb-2">{t('telegram_chat')}</label>
-                      <input type="text" value={agentSettings.telegram_admin_chat_id || ""} onChange={e => setAgentSettings({...agentSettings, telegram_admin_chat_id: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2563EB]" dir="ltr" />
+                      <label className="block text-sm font-semibold uppercase text-zinc-500 mb-2">{t('telegram_chat')}</label>
+                      <input type="text" value={agentSettings.telegram_admin_chat_id || ""} onChange={e => setAgentSettings({...agentSettings, telegram_admin_chat_id: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-base outline-none focus:border-[#2563EB]" dir="ltr" />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold uppercase text-zinc-500 mb-2">{t('bale_bot')}</label>
-                      <input type="password" value={agentSettings.bale_bot_token || ""} onChange={e => setAgentSettings({...agentSettings, bale_bot_token: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2563EB]" dir="ltr" />
+                      <label className="block text-sm font-semibold uppercase text-zinc-500 mb-2">{t('bale_bot')}</label>
+                      <input type="password" value={agentSettings.bale_bot_token || ""} onChange={e => setAgentSettings({...agentSettings, bale_bot_token: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-base outline-none focus:border-[#2563EB]" dir="ltr" />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold uppercase text-zinc-500 mb-2">{t('bale_chat')}</label>
-                      <input type="text" value={agentSettings.bale_admin_chat_id || ""} onChange={e => setAgentSettings({...agentSettings, bale_admin_chat_id: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2563EB]" dir="ltr" />
+                      <label className="block text-sm font-semibold uppercase text-zinc-500 mb-2">{t('bale_chat')}</label>
+                      <input type="text" value={agentSettings.bale_admin_chat_id || ""} onChange={e => setAgentSettings({...agentSettings, bale_admin_chat_id: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-base outline-none focus:border-[#2563EB]" dir="ltr" />
                     </div>
                     <div className="md:col-span-2">
-                      <label className="block text-xs font-semibold uppercase text-zinc-500 mb-2">{t('crm_webhook')}</label>
-                      <input type="url" value={agentSettings.crm_webhook_url || ""} onChange={e => setAgentSettings({...agentSettings, crm_webhook_url: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2563EB]" placeholder="https://..." dir="ltr" />
+                      <label className="block text-sm font-semibold uppercase text-zinc-500 mb-2">{t('crm_webhook')}</label>
+                      <input type="url" value={agentSettings.crm_webhook_url || ""} onChange={e => setAgentSettings({...agentSettings, crm_webhook_url: e.target.value})} className="w-full bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-base outline-none focus:border-[#2563EB]" placeholder="https://..." dir="ltr" />
                     </div>
                   </div>
                 </div>
@@ -1628,12 +1628,12 @@ export default function App() {
                 {/* Live Widget Test */}
                 <div className="space-y-4 pt-4 border-t border-zinc-200">
                   <h3 className="text-lg font-semibold">{t('live_widget_sec')}</h3>
-                  <p className="text-xs text-zinc-500">{t('live_widget_desc')}</p>
-                  <input type="text" value={agentSettings.widget_token_input || ""} onChange={e => setAgentSettings({...agentSettings, widget_token_input: e.target.value})} className="w-full max-w-md bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2563EB]" placeholder="wgt_..." dir="ltr" />
+                  <p className="text-sm text-zinc-500">{t('live_widget_desc')}</p>
+                  <input type="text" value={agentSettings.widget_token_input || ""} onChange={e => setAgentSettings({...agentSettings, widget_token_input: e.target.value})} className="w-full max-w-md bg-zinc-100 border border-zinc-300 rounded-xl px-4 py-2.5 text-base outline-none focus:border-[#2563EB]" placeholder="wgt_..." dir="ltr" />
                 </div>
 
                 <div className="flex justify-end pt-4">
-                  <button type="submit" disabled={isSaving} className="px-6 py-3 rounded-xl text-white font-semibold text-sm shadow-md hover:opacity-90 transition-opacity flex items-center gap-2 bg-[#2563EB]">
+                  <button type="submit" disabled={isSaving} className="px-6 py-3 rounded-xl text-white font-semibold text-base shadow-md hover:opacity-90 transition-opacity flex items-center gap-2 bg-[#2563EB]">
                     {isSaving ? <RefreshCw className="animate-spin" size={18} /> : null}
                     {t('save_config')}
                   </button>
@@ -1648,11 +1648,11 @@ export default function App() {
               <div className="flex justify-between items-center flex-wrap gap-4">
                 <div>
                   <h2 className="text-2xl font-bold tracking-tight">{t('kb_title')}</h2>
-                  <p className="text-sm text-zinc-500">{t('kb_desc')} (Total: {kbTotalCount})</p>
+                  <p className="text-base text-zinc-500">{t('kb_desc')} (Total: {kbTotalCount})</p>
                 </div>
                 <div className="flex bg-zinc-200 p-1 rounded-xl shrink-0">
-                  <button onClick={() => setKbKind('faq')} className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all ${kbKind === 'faq' ? 'bg-white shadow-sm text-zinc-900' : 'text-zinc-500'}`}>FAQ</button>
-                  <button onClick={() => setKbKind('catalog')} className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all ${kbKind === 'catalog' ? 'bg-white shadow-sm text-zinc-900' : 'text-zinc-500'}`}>Catalog</button>
+                  <button onClick={() => setKbKind('faq')} className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-all ${kbKind === 'faq' ? 'bg-white shadow-sm text-zinc-900' : 'text-zinc-500'}`}>FAQ</button>
+                  <button onClick={() => setKbKind('catalog')} className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-all ${kbKind === 'catalog' ? 'bg-white shadow-sm text-zinc-900' : 'text-zinc-500'}`}>Catalog</button>
                 </div>
               </div>
 
@@ -1662,12 +1662,12 @@ export default function App() {
                   <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center">
                     <FileText size={24} />
                   </div>
-                  <h3 className="font-semibold text-sm">{t('faq_upload_title')}</h3>
+                  <h3 className="font-semibold text-base">{t('faq_upload_title')}</h3>
                   <input type="file" id="faq-upload" className="hidden" accept=".json,.csv,.xlsx" onChange={e => setFaqFile(e.target.files[0])} />
-                  <label htmlFor="faq-upload" className="cursor-pointer text-sm text-zinc-500 hover:text-blue-600">
+                  <label htmlFor="faq-upload" className="cursor-pointer text-base text-zinc-500 hover:text-blue-600">
                     {faqFile ? faqFile.name : t('select_file')}
                   </label>
-                  <button onClick={() => handleFileUpload('faq')} disabled={!faqFile || uploadingKb} className="mt-2 px-4 py-2 bg-[#2563EB] text-white rounded-lg text-xs font-medium disabled:opacity-50 flex items-center gap-2">
+                  <button onClick={() => handleFileUpload('faq')} disabled={!faqFile || uploadingKb} className="mt-2 px-4 py-2 bg-[#2563EB] text-white rounded-lg text-sm font-medium disabled:opacity-50 flex items-center gap-2">
                     {uploadingKb && faqFile ? <Loader2 size={14} className="animate-spin" /> : <UploadCloud size={14} />} {t('upload_btn')}
                   </button>
                 </div>
@@ -1676,12 +1676,12 @@ export default function App() {
                   <div className="w-12 h-12 bg-cyan-100 text-cyan-600 rounded-full flex items-center justify-center">
                     <Database size={24} />
                   </div>
-                  <h3 className="font-semibold text-sm">{t('catalog_upload_title')}</h3>
+                  <h3 className="font-semibold text-base">{t('catalog_upload_title')}</h3>
                   <input type="file" id="catalog-upload" className="hidden" accept=".json" onChange={e => setCatalogFile(e.target.files[0])} />
-                  <label htmlFor="catalog-upload" className="cursor-pointer text-sm text-zinc-500 hover:text-cyan-600">
+                  <label htmlFor="catalog-upload" className="cursor-pointer text-base text-zinc-500 hover:text-cyan-600">
                     {catalogFile ? catalogFile.name : t('select_json')}
                   </label>
-                  <button onClick={() => handleFileUpload('catalog')} disabled={!catalogFile || uploadingKb} className="mt-2 px-4 py-2 bg-[#22D3EE] text-zinc-900 rounded-lg text-xs font-medium disabled:opacity-50 flex items-center gap-2">
+                  <button onClick={() => handleFileUpload('catalog')} disabled={!catalogFile || uploadingKb} className="mt-2 px-4 py-2 bg-[#22D3EE] text-zinc-900 rounded-lg text-sm font-medium disabled:opacity-50 flex items-center gap-2">
                     {uploadingKb && catalogFile ? <Loader2 size={14} className="animate-spin" /> : <UploadCloud size={14} />} {t('upload_btn')}
                   </button>
                 </div>
@@ -1691,13 +1691,13 @@ export default function App() {
               <div className="rounded-2xl border border-zinc-200 bg-white overflow-hidden shadow-sm">
                 <table className="w-full text-start border-collapse">
                   <thead>
-                    <tr className="border-b border-zinc-200 bg-gray-50 text-xs font-semibold text-zinc-500 uppercase tracking-wider">
+                    <tr className="border-b border-zinc-200 bg-gray-50 text-sm font-semibold text-zinc-500 uppercase tracking-wider">
                       <th className="p-4 text-start">{t('vector_id')}</th>
                       <th className="p-4 text-start">{t('doc_content')}</th>
                       <th className="p-4 text-start">{t('metadata')}</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-zinc-200 text-sm">
+                  <tbody className="divide-y divide-zinc-200 text-base">
                     {knowledgeBase.length === 0 ? (
                       <tr>
                         <td colSpan={3} className="p-8 text-center text-zinc-500">{t('no_vectors')}</td>
@@ -1705,7 +1705,7 @@ export default function App() {
                     ) : (
                       knowledgeBase.map((item, idx) => (
                         <tr key={idx} className="hover:bg-zinc-50 transition-colors">
-                          <td className="p-4 font-mono text-xs text-[#2563EB] align-top">{item.Id}</td>
+                          <td className="p-4 font-mono text-sm text-[#2563EB] align-top">{item.Id}</td>
                           <td className="p-4 min-w-[300px] text-zinc-700 whitespace-pre-wrap break-words align-top leading-relaxed" dir="auto">
                             {item.Document}
                           </td>
@@ -1728,20 +1728,20 @@ export default function App() {
             <div className="space-y-6 animate-in fade-in duration-300">
               <div>
                 <h2 className="text-2xl font-bold tracking-tight">{t('tickets_title')}</h2>
-                <p className="text-sm text-zinc-500">{t('tickets_desc')}</p>
+                <p className="text-base text-zinc-500">{t('tickets_desc')}</p>
               </div>
 
               <div className="rounded-2xl border border-zinc-200 bg-white overflow-hidden shadow-sm">
                 <table className="w-full text-start border-collapse">
                   <thead>
-                    <tr className="border-b border-zinc-200 bg-gray-50 text-xs font-semibold text-zinc-500 uppercase tracking-wider">
+                    <tr className="border-b border-zinc-200 bg-gray-50 text-sm font-semibold text-zinc-500 uppercase tracking-wider">
                       <th className="p-4 text-start">{t('ticket_id')}</th>
                       <th className="p-4 text-start">{t('user_id')}</th>
                       <th className="p-4 text-start">{t('summary')}</th>
                       <th className="p-4 text-start">{t('created_at')}</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-zinc-200 text-sm">
+                  <tbody className="divide-y divide-zinc-200 text-base">
                     {tickets.length === 0 ? (
                       <tr>
                         <td colSpan={4} className="p-8 text-center text-zinc-500">{t('no_tickets')}</td>
@@ -1749,10 +1749,10 @@ export default function App() {
                     ) : (
                       tickets.map((tkt, idx) => (
                         <tr key={idx} className="hover:bg-zinc-50 transition-colors">
-                          <td className="p-4 font-mono text-xs text-zinc-600">{tkt.ticket_id}</td>
-                          <td className="p-4 font-mono text-xs text-zinc-500">{tkt.user_id}</td>
+                          <td className="p-4 font-mono text-sm text-zinc-600">{tkt.ticket_id}</td>
+                          <td className="p-4 font-mono text-sm text-zinc-500">{tkt.user_id}</td>
                           <td className="p-4 text-zinc-800" dir="auto">{tkt.summary}</td>
-                          <td className="p-4 text-xs text-zinc-500" dir="ltr">{new Date(tkt.created_at).toLocaleString()}</td>
+                          <td className="p-4 text-sm text-zinc-500" dir="ltr">{new Date(tkt.created_at).toLocaleString()}</td>
                         </tr>
                       ))
                     )}
@@ -1767,21 +1767,21 @@ export default function App() {
             <div className="space-y-6 animate-in fade-in duration-300">
               <div>
                 <h2 className="text-2xl font-bold tracking-tight">{t('finances_title')}</h2>
-                <p className="text-sm text-zinc-500">{t('finances_desc')}</p>
+                <p className="text-base text-zinc-500">{t('finances_desc')}</p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="p-6 rounded-2xl border border-zinc-200 bg-white space-y-4 shadow-sm">
                   <h3 className="font-bold text-lg">{t('billing_overview')}</h3>
-                  <div className="flex justify-between py-2 border-b border-zinc-200 text-sm">
+                  <div className="flex justify-between py-2 border-b border-zinc-200 text-base">
                     <span className="text-zinc-500">{t('curr_balance')}</span>
                     <span className="font-bold text-[#2563EB]" dir="ltr">{financeData?.balance || 0} {financeData?.currency || 'CRD'}</span>
                   </div>
-                  <div className="flex justify-between py-2 border-b border-zinc-200 text-sm">
+                  <div className="flex justify-between py-2 border-b border-zinc-200 text-base">
                     <span className="text-zinc-500">{t('total_alloc')}</span>
                     <span className="font-semibold">{financeData?.total_credits || 0}</span>
                   </div>
-                  <div className="flex justify-between py-2 text-sm">
+                  <div className="flex justify-between py-2 text-base">
                     <span className="text-zinc-500">{t('total_cons')}</span>
                     <span className="font-semibold text-red-500">{financeData?.total_debits || 0}</span>
                   </div>
@@ -1789,11 +1789,11 @@ export default function App() {
 
                 <div className="p-6 rounded-2xl border border-zinc-200 bg-white space-y-4 shadow-sm">
                   <h3 className="font-bold text-lg">{t('rate_limits')}</h3>
-                  <div className="flex justify-between py-2 border-b border-zinc-200 text-sm">
+                  <div className="flex justify-between py-2 border-b border-zinc-200 text-base">
                     <span className="text-zinc-500">{t('chat_daily')}</span>
                     <span className="font-semibold" dir="ltr">{financeData?.rate_limits?.chat_used_today || 0} / {financeData?.rate_limits?.chat_daily_limit || 0}</span>
                   </div>
-                  <div className="flex justify-between py-2 text-sm">
+                  <div className="flex justify-between py-2 text-base">
                     <span className="text-zinc-500">{t('audio_daily')}</span>
                     <span className="font-semibold" dir="ltr">{financeData?.rate_limits?.audio_used_today || 0} / {financeData?.rate_limits?.audio_daily_limit || 0}</span>
                   </div>
@@ -1807,18 +1807,18 @@ export default function App() {
             <div className="max-w-2xl space-y-6 animate-in fade-in duration-300">
               <div>
                 <h2 className="text-2xl font-bold tracking-tight">{t('widget_title')}</h2>
-                <p className="text-sm text-zinc-500">{t('widget_desc')}</p>
+                <p className="text-base text-zinc-500">{t('widget_desc')}</p>
               </div>
 
               <div className="p-6 rounded-2xl border border-zinc-200 bg-white space-y-6 shadow-sm">
                 <form onSubmit={handleGenerateWidgetToken} className="space-y-4">
                   <div>
-                    <label className="block text-xs font-semibold uppercase text-zinc-500 mb-2">{t('domain_label')}</label>
+                    <label className="block text-sm font-semibold uppercase text-zinc-500 mb-2">{t('domain_label')}</label>
                     <input 
                       type="text" 
                       value={widgetDomain} 
                       onChange={e => setWidgetDomain(e.target.value)} 
-                      className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2563EB]" 
+                      className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-2.5 text-base outline-none focus:border-[#2563EB]" 
                       placeholder={t('placeholder_domain')} 
                       dir="ltr"
                     />
@@ -1826,7 +1826,7 @@ export default function App() {
                   <button 
                     type="submit" 
                     disabled={generatingToken} 
-                    className="px-6 py-3 rounded-xl text-white font-semibold text-sm shadow-md hover:opacity-90 transition-opacity flex items-center gap-2 bg-[#2563EB] disabled:opacity-70"
+                    className="px-6 py-3 rounded-xl text-white font-semibold text-base shadow-md hover:opacity-90 transition-opacity flex items-center gap-2 bg-[#2563EB] disabled:opacity-70"
                   >
                     {generatingToken ? <Loader2 size={16} className="animate-spin" /> : <Code size={16} />}
                     {t('generate_widget_btn')}
@@ -1835,13 +1835,13 @@ export default function App() {
 
                 {generatedWidgetToken && (
                   <div className="pt-6 border-t border-zinc-200 space-y-2 animate-in slide-in-from-top-2 duration-300">
-                    <label className="block text-xs font-semibold uppercase text-emerald-600">{t('generated_jwt_label')}</label>
+                    <label className="block text-sm font-semibold uppercase text-emerald-600">{t('generated_jwt_label')}</label>
                     <div className="flex items-center gap-2">
                       <input 
                         type="text" 
                         readOnly 
                         value={generatedWidgetToken} 
-                        className="flex-1 bg-emerald-50 border border-emerald-200 text-emerald-900 rounded-xl px-4 py-2.5 text-sm outline-none font-mono" 
+                        className="flex-1 bg-emerald-50 border border-emerald-200 text-emerald-900 rounded-xl px-4 py-2.5 text-base outline-none font-mono" 
                         dir="ltr"
                       />
                       <button 
@@ -1867,31 +1867,31 @@ export default function App() {
             <div className="max-w-xl space-y-6 animate-in fade-in duration-300">
               <div>
                 <h2 className="text-2xl font-bold tracking-tight">{t('api_title')}</h2>
-                <p className="text-sm text-zinc-500">{t('api_desc')}</p>
+                <p className="text-base text-zinc-500">{t('api_desc')}</p>
               </div>
 
               <div className="p-6 rounded-2xl border border-zinc-200 bg-white space-y-6 shadow-sm">
-                <div className="flex items-start gap-3 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-sm">
+                <div className="flex items-start gap-3 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-base">
                   <ShieldAlert size={20} className="shrink-0 mt-0.5" />
                   <p className="leading-relaxed">{t('api_warn')}</p>
                 </div>
                 
                 <div className="space-y-2">
-                  <label className="block text-xs font-semibold uppercase text-zinc-500">{t('tab_apikeys')}</label>
+                  <label className="block text-sm font-semibold uppercase text-zinc-500">{t('tab_apikeys')}</label>
                   <input 
                     type="text" 
                     readOnly 
                     value="••••••••••••••••••••••••••••••••••••••" 
-                    className="w-full bg-zinc-50 border border-zinc-200 text-zinc-400 rounded-xl px-4 py-2.5 text-sm outline-none font-mono" 
+                    className="w-full bg-zinc-50 border border-zinc-200 text-zinc-400 rounded-xl px-4 py-2.5 text-base outline-none font-mono" 
                     dir="ltr"
                   />
-                  <p className="text-xs text-zinc-500">{t('api_key_hidden')}</p>
+                  <p className="text-sm text-zinc-500">{t('api_key_hidden')}</p>
                 </div>
 
                 <div className="flex gap-4 pt-4 border-t border-zinc-200">
                   <button 
                     onClick={handleRegenerateKey}
-                    className="px-5 py-2.5 rounded-xl text-white font-semibold text-sm shadow-md hover:opacity-90 flex items-center gap-2 transition-opacity bg-red-600"
+                    className="px-5 py-2.5 rounded-xl text-white font-semibold text-base shadow-md hover:opacity-90 flex items-center gap-2 transition-opacity bg-red-600"
                   >
                     <RefreshCw size={16} /> {t('regen_key')}
                   </button>
@@ -1899,14 +1899,14 @@ export default function App() {
 
                 {newApiKey && (
                   <div className="pt-6 border-t border-zinc-200 space-y-2 animate-in slide-in-from-top-2 duration-300">
-                    <label className="block text-xs font-semibold uppercase text-emerald-600">{t('api_key_generated')}</label>
-                    <p className="text-xs text-amber-600 font-medium mb-2">{t('api_key_once_warning')}</p>
+                    <label className="block text-sm font-semibold uppercase text-emerald-600">{t('api_key_generated')}</label>
+                    <p className="text-sm text-amber-600 font-medium mb-2">{t('api_key_once_warning')}</p>
                     <div className="flex items-center gap-2">
                       <input 
                         type="text" 
                         readOnly 
                         value={newApiKey} 
-                        className="flex-1 bg-emerald-50 border border-emerald-200 text-emerald-900 rounded-xl px-4 py-2.5 text-sm outline-none font-mono" 
+                        className="flex-1 bg-emerald-50 border border-emerald-200 text-emerald-900 rounded-xl px-4 py-2.5 text-base outline-none font-mono" 
                         dir="ltr"
                       />
                       <button 
@@ -1932,12 +1932,12 @@ export default function App() {
             <div className="space-y-6">
               <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                 <h2 className="text-lg font-bold text-slate-800 mb-1">{t('uploadAudioTitle')}</h2>
-                <p className="text-sm text-slate-500 mb-6">{t('uploadAudioDesc')}</p>
+                <p className="text-base text-slate-500 mb-6">{t('uploadAudioDesc')}</p>
 
                 <form onSubmit={handleStartAudioAnalysis} className="space-y-5">
                   {/* انتخاب فایل صوتی */}
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                    <label className="block text-base font-medium text-slate-700 mb-2">
                       {t('selectAudioFile')}
                     </label>
                     <input
@@ -1945,20 +1945,20 @@ export default function App() {
                       accept=".mp3,.wav,.m4a,.ogg,audio/*"
                       onChange={(e) => setAudioFile(e.target.files[0] || null)}
                       disabled={isAnalyzingAudio}
-                      className="block w-full text-sm text-slate-600 file:me-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer border border-slate-300 rounded-lg p-1.5"
+                      className="block w-full text-base text-slate-600 file:me-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-base file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer border border-slate-300 rounded-lg p-1.5"
                     />
                   </div>
 
                   {/* انتخاب حالت پیاده‌سازی متن (Transcript Mode) */}
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                    <label className="block text-base font-medium text-slate-700 mb-2">
                       {t('transcriptMode')}
                     </label>
                     <select
                       value={transcriptMode}
                       onChange={(e) => setTranscriptMode(e.target.value)}
                       disabled={isAnalyzingAudio}
-                      className="w-full md:w-1/2 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-800 focus:ring-2 focus:ring-indigo-500 outline-none"
+                      className="w-full md:w-1/2 p-2.5 bg-slate-50 border border-slate-300 rounded-lg text-base text-slate-800 focus:ring-2 focus:ring-indigo-500 outline-none"
                     >
                       <option value="Full">{t('modeFull')}</option>
                       <option value="Summary">{t('modeSummary')}</option>
@@ -1967,7 +1967,7 @@ export default function App() {
 
                   {/* انتخاب ماژول‌های هوش مصنوعی ( مطابق محاسبه هزینه در main.py ) */}
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                    <label className="block text-base font-medium text-slate-700 mb-2">
                       {t('analysisModules')}
                     </label>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -1988,7 +1988,7 @@ export default function App() {
                             disabled={isAnalyzingAudio}
                             className="rounded text-indigo-600 focus:ring-indigo-500 h-4 w-4 me-2"
                           />
-                          <span className="text-sm text-slate-700">{mod.label}</span>
+                          <span className="text-base text-slate-700">{mod.label}</span>
                         </label>
                       ))}
                     </div>
@@ -1998,7 +1998,7 @@ export default function App() {
                   <button
                     type="submit"
                     disabled={isAnalyzingAudio || !audioFile}
-                    className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-400 text-white font-medium rounded-lg text-sm transition flex items-center gap-2"
+                    className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-400 text-white font-medium rounded-lg text-base transition flex items-center gap-2"
                   >
                     {isAnalyzingAudio ? (
                       <>
@@ -2017,13 +2017,13 @@ export default function App() {
                 <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 space-y-4">
                   <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
                     <div>
-                      <span className="text-xs text-slate-500 block">{t('jobIdLabel')}</span>
-                      <code className="text-sm font-mono text-slate-800">{audioJobId || "---"}</code>
+                      <span className="text-sm text-slate-500 block">{t('jobIdLabel')}</span>
+                      <code className="text-base font-mono text-slate-800">{audioJobId || "---"}</code>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-xs text-slate-500">{t('statusLabel')}:</span>
+                      <span className="text-sm text-slate-500">{t('statusLabel')}:</span>
                       <span
-                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                        className={`px-3 py-1 rounded-full text-sm font-semibold ${
                           audioStatus === "Completed"
                             ? "bg-emerald-100 text-emerald-700"
                             : audioStatus === "Failed"
@@ -2037,7 +2037,7 @@ export default function App() {
                   </div>
 
                   {(audioStatus === "Queued" || audioStatus === "Processing") && (
-                    <p className="text-sm text-slate-600 flex items-center gap-2">
+                    <p className="text-base text-slate-600 flex items-center gap-2">
                       <span className="h-2 w-2 bg-amber-500 rounded-full animate-ping"></span>
                       {t('audioPollingMsg')}
                     </p>
@@ -2046,7 +2046,7 @@ export default function App() {
                   {audioStatus === "Completed" && audioResult && (
                     <div className="space-y-4">
                       <h3 className="text-md font-bold text-slate-800">{t('analysisResultTitle')}</h3>
-                      <pre className="bg-slate-900 text-cyan-300 p-4 rounded-lg text-xs font-mono overflow-x-auto whitespace-pre-wrap leading-relaxed" dir="ltr">
+                      <pre className="bg-slate-900 text-cyan-300 p-4 rounded-lg text-sm font-mono overflow-x-auto whitespace-pre-wrap leading-relaxed" dir="ltr">
                         {JSON.stringify(audioResult, null, 2)}
                       </pre>
                     </div>
